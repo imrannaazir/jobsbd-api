@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\projects\\code-wizard\\api\\logs\\winston\\errors\\.3490482d583f7620bec664b02a729782d8703d08-audit.json",
+    "files": [
+        {
+            "date": 1731823367118,
+            "name": "D:\\projects\\code-wizard\\api\\logs\\winston\\errors\\phu-2024-17-11-12-error.log",
+            "hash": "b9513571796731d04b884613139e04c586845fa68e6ca5d0f299548c4d3901e4"
+        },
+        {
+            "date": 1731836608130,
+            "name": "D:\\projects\\code-wizard\\api\\logs\\winston\\errors\\phu-2024-17-11-15-error.log",
+            "hash": "622fd3b0e8ffab4aa3595f7ba1314c71ae8c773eb2e6f1aa1a282079871c4839"
+        }
+    ],
+    "hashType": "sha256"
+}
