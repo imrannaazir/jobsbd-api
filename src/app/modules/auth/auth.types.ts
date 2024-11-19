@@ -9,3 +9,8 @@ export type TRegister = {
   fullName?: string;
   companyName?: string;
 };
+
+export type IChangePassword = {
+  oldPassword: string;
+  newPassword: string;
+};
