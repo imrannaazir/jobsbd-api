@@ -1,7 +1,10 @@
+import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
+import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
+import { jwtHelpers } from '../../../helpers/jwthelpers';
 import prisma from '../../../shared/prisma';
-import { TRegister } from './auth.types';
+import { TLogin, TRegister } from './auth.types';
 import { hashedPassword } from './auth.utils';
 
 const register = async (payload: TRegister) => {
@@ -72,8 +75,53 @@ const register = async (payload: TRegister) => {
   return result;
 };
 
+const login = async (payload: TLogin) => {
+  const isUserAlreadyExist = await prisma.user.findFirst({
+    where: {
+      AND: [{ email: payload.email }, { status: 'ACTIVE' }],
+    },
+  });
+  console.log(isUserAlreadyExist);
+
+  if (!isUserAlreadyExist?.id) {
+    throw new ApiError(httpStatus.CONFLICT, 'User Not Found!!!');
+  }
+  const isCorrectPassword = await bcrypt.compare(
+    payload.password,
+    isUserAlreadyExist.password,
+  );
+  if (!isCorrectPassword) {
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Incorrect password');
+  }
+  const accessToken = jwtHelpers.generateToken(
+    {
+      id: isUserAlreadyExist.id,
+      email: isUserAlreadyExist.email,
+      role: isUserAlreadyExist.role,
+    },
+    config.jwt__access_secret as string,
+    config.jwt__access_expire_in as string,
+  );
+  const refreshToken = jwtHelpers.generateToken(
+    {
+      id: isUserAlreadyExist.id,
+      email: isUserAlreadyExist.email,
+      role: isUserAlreadyExist.role,
+    },
+    config.jwt__refresh_secret as string,
+    config.jwt__refresh_expire_in as string,
+  );
+  return {
+    id: isUserAlreadyExist.id,
+    email: isUserAlreadyExist.email,
+    accessToken,
+    refreshToken,
+  };
+};
+
 const AuthServices = {
   register,
+  login,
 };
 
 export default AuthServices;
