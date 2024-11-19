@@ -1,19 +1,19 @@
-# **Health Care Server**
+# **JobsBD Server**
 
-Welcome to the **Health Care Server** project! This repository contains the server-side code for our Health Care application. This README file provides guidelines on how to build and contribute to the project as a team. Please make sure to follow these instructions to maintain a consistent and efficient development process.
+Welcome to the **JobsBD** project! This repository contains the server-side code for our jobsbd application. This README file provides guidelines on how to build and contribute to the project as a team. Please make sure to follow these instructions to maintain a consistent and efficient development process.
 
 ## **Getting Started**
 
 1. **Clone the Repository:**
     
     ```bash
-    git clone https://github.com/Programming-Hero-Next-Level-Development/health-care-server.git
+    git clone https://github.com/imrannaazir/jobsbd-api.git
     ```
     
 2. **Navigate to the Project Directory:**
     
     ```bash
-    cd health-care-server
+    cd jobsbd-api
     ```
     
 3. Please update the filename from `.env.example` to `.env`
@@ -73,5 +73,3 @@ Use the GitHub Issues tab to report bugs, suggest features, or discuss enhanceme
 - **Coding Standards:**
 Follow the coding standards and conventions established by the team. Ensure your code is well-documented.
 
-
-#### Postman API Documentation: https://documenter.getpostman.com/view/26694209/2s9YynmjXH
