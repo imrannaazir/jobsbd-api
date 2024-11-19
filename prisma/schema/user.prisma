@@ -1,4 +1,29 @@
+
+
 model User {
-id Int @default(autoincrement()) @id
-name String
+id String @id @unique @default(uuid())
+email String
+phoneNubmer String
+password String
+role Role
+status STATUS
+candidate Candidate?
+employer Employer? 
+createdAt DateTime
+updatedAt DateTime @updatedAt
+}
+
+
+enum Role {
+    ADMIN
+    SUPER_ADMIN
+    CANDIDATE
+    EMPLOYER
+}
+
+enum STATUS {
+    PENDING
+    ACTIVE
+    BLOCKED
+
 }
