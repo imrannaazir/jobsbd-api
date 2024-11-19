@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
-import { jwtHelpers } from '../../../helpers/jwthelpers';
+import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import prisma from '../../../shared/prisma';
 import { TLogin, TRegister } from './auth.types';
 import { hashedPassword } from './auth.utils';
@@ -76,12 +76,12 @@ const register = async (payload: TRegister) => {
 };
 
 const login = async (payload: TLogin) => {
+  console.log(payload);
   const isUserAlreadyExist = await prisma.user.findFirst({
     where: {
-      AND: [{ email: payload.email }, { status: 'ACTIVE' }],
+      AND: [{ email: payload.email }],
     },
   });
-  console.log(isUserAlreadyExist);
 
   if (!isUserAlreadyExist?.id) {
     throw new ApiError(httpStatus.CONFLICT, 'User Not Found!!!');
@@ -119,9 +119,45 @@ const login = async (payload: TLogin) => {
   };
 };
 
+const refreshToken = async (token: string) => {
+  let decodedData;
+  try {
+    decodedData = jwtHelpers.verifyToken(
+      token,
+      config.jwt__refresh_secret as string,
+    );
+  } catch (error) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'You are not authorized');
+  }
+  const userData = await prisma.user.findFirst({
+    where: {
+      AND: [{ email: decodedData.email }],
+    },
+  });
+  if (!userData) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'You are not authorized');
+  }
+  const accessToken = jwtHelpers.generateToken(
+    {
+      id: userData.id,
+      email: userData.email,
+      role: userData.role,
+    },
+    config.jwt__access_secret as string,
+    config.jwt__access_expire_in as string,
+  );
+
+  return {
+    id: userData.id,
+    email: userData.email,
+    accessToken,
+  };
+};
+
 const AuthServices = {
   register,
   login,
+  refreshToken,
 };
 
 export default AuthServices;

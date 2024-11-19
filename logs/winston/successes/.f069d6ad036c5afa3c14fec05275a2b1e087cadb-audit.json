@@ -14,6 +14,11 @@
             "date": 1732002013295,
             "name": "/Users/mostakemhossainobhe/Desktop/jobsbd-api/logs/winston/successes/phu-2024-19-11-13-success.log",
             "hash": "e29ecf13e8a2a9b5d99308092a83839730e6ea5b7bebbaf7989ddc986aafc849"
+        },
+        {
+            "date": 1732021930108,
+            "name": "/Users/mostakemhossainobhe/Desktop/jobsbd-api/logs/winston/successes/phu-2024-19-11-19-success.log",
+            "hash": "d9ce5e84fa6d29d69b8de614dbf7570a77c332065e488e70079991d4109bc8e2"
         }
     ],
     "hashType": "sha256"
