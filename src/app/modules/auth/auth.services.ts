@@ -6,6 +6,7 @@ import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import prisma from '../../../shared/prisma';
 import { IChangePassword, TLogin, TRegister } from './auth.types';
 import { hashedPassword } from './auth.utils';
+import emailSender from './sendMailer';
 
 const register = async (payload: TRegister) => {
   /* 
@@ -27,7 +28,7 @@ const register = async (payload: TRegister) => {
     },
   });
 
-  if (isUserAlreadyExist?.id) {
+  if (isUserAlreadyExist) {
     throw new ApiError(httpStatus.CONFLICT, 'User is already registered.');
   }
 
@@ -188,11 +189,81 @@ const changePassword = async (user: any, payload: IChangePassword) => {
   };
 };
 
+const forgotPassword = async (payload: { email: string }) => {
+  const userData = await prisma.user.findFirstOrThrow({
+    where: {
+      email: payload.email,
+    },
+  });
+  const resetPasswordToken = jwtHelpers.generateToken(
+    {
+      id: userData.id,
+      email: userData.email,
+      role: userData.role,
+    },
+    config.reset_password_token as string,
+    config.reset_password_expire_in as string,
+  );
+  const resetPassword_link =
+    config.reset_password_link +
+    `?userId=${userData.id}&token=${resetPasswordToken}`;
+  await emailSender(
+    userData.email,
+    `
+        <div>
+        <p>Dear ${userData.email}</p>
+        <p>Your reset password link:</p>
+        <a href=${resetPassword_link}>
+        <button>Click here to Reset Password</button>
+        </a>
+        </div>
+          `,
+  );
+};
+
+const resetPassword = async (
+  token: string,
+  payload: {
+    id: string;
+    password: string;
+  },
+) => {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: payload.id,
+    },
+  });
+  const isValidToken = jwtHelpers.verifyToken(
+    token,
+    config.reset_password_token as string,
+  );
+
+  if (!isValidToken) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Invalid credentials');
+  }
+
+  const hashedPassword: string = await bcrypt.hash(
+    payload.password,
+    Number(config.bycrypt_salt_rounds),
+  );
+  const data = await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+  return data;
+};
+
 const AuthServices = {
   register,
   login,
   refreshToken,
   changePassword,
+  forgotPassword,
+  resetPassword,
 };
 
 export default AuthServices;
