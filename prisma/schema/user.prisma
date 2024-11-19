@@ -3,13 +3,13 @@
 model User {
 id String @id @unique @default(uuid())
 email String
-phoneNubmer String
+phoneNumber String
 password String
 role Role
 status STATUS
 candidate Candidate?
 employer Employer? 
-createdAt DateTime
+createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 
 }
