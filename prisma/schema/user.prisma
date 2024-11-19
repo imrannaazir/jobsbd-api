@@ -11,6 +11,7 @@ candidate Candidate?
 employer Employer? 
 createdAt DateTime
 updatedAt DateTime @updatedAt
+
 }
 
 

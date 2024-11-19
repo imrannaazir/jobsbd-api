@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/mostakemhossainobhe/Desktop/jobsbd-api/logs/winston/successes/.f069d6ad036c5afa3c14fec05275a2b1e087cadb-audit.json",
+    "files": [
+        {
+            "date": 1731988535724,
+            "name": "/Users/mostakemhossainobhe/Desktop/jobsbd-api/logs/winston/successes/phu-2024-19-11-09-success.log",
+            "hash": "e963af0f0fa4e388b4233b353b8ece25eb3d16ebafb292b878aebfd5d8d7fd83"
+        }
+    ],
+    "hashType": "sha256"
+}
