@@ -1,10 +1,16 @@
+import { Role } from '@prisma/client';
+
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
-import { JwtPayload } from 'jsonwebtoken';
+type TUser = {
+  id: string;
+  email: string;
+  role: Role;
+};
 
 declare global {
   namespace Express {
     interface Request {
-      user: JwtPayload | null;
+      user: TUser | null;
     }
   }
 }

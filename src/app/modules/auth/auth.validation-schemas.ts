@@ -33,8 +33,15 @@ const registerValidationSchema = z.object({
   }),
 });
 
+const verifyAccountValidationSchema = z.object({
+  body: z.object({
+    token: z.string({ required_error: 'Token is required.' }),
+  }),
+});
+
 const AuthValidation = {
   loginValidationSchema,
   registerValidationSchema,
+  verifyAccountValidationSchema,
 };
 export default AuthValidation;

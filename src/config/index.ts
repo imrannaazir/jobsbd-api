@@ -19,7 +19,9 @@ export default {
   jwt__refresh_expire_in: process.env.JWT_REFRESH_EXPIRE_IN,
   reset_password_token: process.env.RESET_PASSWORD_TOKEN,
   reset_password_expire_in: process.env.RESET_PASSWORD_TOKEN_EXPIRE_IN,
-  reset_password_link: process.env.RESET_PASSWORD_LINK,
+  verify_token: process.env.VERIFY_TOKEN,
+  verify_expire_in: process.env.VERIFY_TOKEN_EXPIRE_IN,
+  client_origin: process.env.CLIENT_ORIGIN,
   emailSender: {
     email: process.env.EMAIL,
     app_password: process.env.APP_PASSWORD,

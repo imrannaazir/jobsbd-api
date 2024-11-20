@@ -12,6 +12,13 @@ router.post(
   validateRequest(AuthValidation.registerValidationSchema),
   AuthControllers.register,
 );
+
+router.post(
+  '/verify-account',
+  validateRequest(AuthValidation.verifyAccountValidationSchema),
+  AuthControllers.verifyAccount,
+);
+
 router.post(
   '/login',
   validateRequest(AuthValidation.loginValidationSchema),

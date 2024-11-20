@@ -11,8 +11,19 @@ const register = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
-    message: 'User registration successfully.',
+    message: 'Registered. Check your email to verify.',
     data: result,
+  });
+});
+
+const verifyAccount = catchAsync(async (req, res) => {
+  const { token } = req.body;
+  await AuthServices.verifyAccount(token);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Account Verified successfully.',
   });
 });
 
@@ -85,5 +96,6 @@ const AuthControllers = {
   changePassword,
   forgotPassword,
   resetPassword,
+  verifyAccount,
 };
 export default AuthControllers;

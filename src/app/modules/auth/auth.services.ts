@@ -9,12 +9,6 @@ import { hashedPassword } from './auth.utils';
 import emailSender from './sendMailer';
 
 const register = async (payload: TRegister) => {
-  /* 
-1. if user already exist by email or phone number 
-2. hash the password 
-3. 
-*/
-
   const isUserAlreadyExist = await prisma.user.findFirst({
     where: {
       OR: [
@@ -70,14 +64,56 @@ const register = async (payload: TRegister) => {
       });
     }
 
+    const verifyToken = jwtHelpers.generateToken(
+      {
+        id: newUser.id,
+        email: newUser.email,
+        role: newUser.role,
+      },
+      config.verify_token as string,
+      config.verify_expire_in as string,
+    );
+
+    const verifyAccountLink = `${config.client_origin}/verify-token?&token=${verifyToken}`;
+    await emailSender(
+      newUser.email,
+      `
+          <div>
+          <p>Dear ${newUser.email}</p>
+          <p>Your account verification link:</p>
+          <a href=${verifyAccountLink}>
+          <button>Click here to Verify Account</button>
+          </a>
+          </div>
+      `,
+    );
+
     return newUser;
   });
 
   return result;
 };
 
+const verifyAccount = async (token: string) => {
+  const isTokenValid = jwtHelpers.verifyToken(token, config.verify_token!);
+
+  if (!isTokenValid) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Invalid token.');
+  }
+
+  const user = await prisma.user.findUnique(isTokenValid.id);
+
+  if (user?.status === 'BLOCKED') {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Your account is blocked.');
+  }
+
+  await prisma.user.update({
+    where: { id: user?.id },
+    data: { status: 'ACTIVE' },
+  });
+};
+
 const login = async (payload: TLogin) => {
-  console.log(payload);
   const isUserAlreadyExist = await prisma.user.findFirst({
     where: {
       AND: [{ email: payload.email }],
@@ -94,6 +130,15 @@ const login = async (payload: TLogin) => {
   if (!isCorrectPassword) {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Incorrect password');
   }
+
+  if (isUserAlreadyExist.status === 'BLOCKED') {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Your account is blocked.');
+  }
+
+  if (isUserAlreadyExist.status === 'PENDING') {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Your account is not verified.');
+  }
+
   const accessToken = jwtHelpers.generateToken(
     {
       id: isUserAlreadyExist.id,
@@ -138,6 +183,15 @@ const refreshToken = async (token: string) => {
   if (!userData) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'You are not authorized');
   }
+
+  if (userData.status === 'BLOCKED') {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Your account is blocked.');
+  }
+
+  if (userData.status === 'PENDING') {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Your account is not verified.');
+  }
+
   const accessToken = jwtHelpers.generateToken(
     {
       id: userData.id,
@@ -195,6 +249,15 @@ const forgotPassword = async (payload: { email: string }) => {
       email: payload.email,
     },
   });
+
+  if (userData.status === 'BLOCKED') {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Your account is blocked.');
+  }
+
+  if (userData.status === 'PENDING') {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Your account is not verified.');
+  }
+
   const resetPasswordToken = jwtHelpers.generateToken(
     {
       id: userData.id,
@@ -204,9 +267,7 @@ const forgotPassword = async (payload: { email: string }) => {
     config.reset_password_token as string,
     config.reset_password_expire_in as string,
   );
-  const resetPassword_link =
-    config.reset_password_link +
-    `?userId=${userData.id}&token=${resetPasswordToken}`;
+  const resetPassword_link = `${config.client_origin}/reset-password?userId=${userData.id}&token=${resetPasswordToken}`;
   await emailSender(
     userData.email,
     `
@@ -242,6 +303,14 @@ const resetPassword = async (
     throw new ApiError(httpStatus.NOT_FOUND, 'Invalid credentials');
   }
 
+  if (user.status === 'BLOCKED') {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Your account is blocked.');
+  }
+
+  if (user.status === 'PENDING') {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Your account is not verified.');
+  }
+
   const hashedPassword: string = await bcrypt.hash(
     payload.password,
     Number(config.bycrypt_salt_rounds),
@@ -259,6 +328,7 @@ const resetPassword = async (
 
 const AuthServices = {
   register,
+  verifyAccount,
   login,
   refreshToken,
   changePassword,
