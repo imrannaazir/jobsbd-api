@@ -95,13 +95,24 @@ const register = async (payload: TRegister) => {
 };
 
 const verifyAccount = async (token: string) => {
+  console.log({
+    token,
+    token2: config.verify_token,
+    ex: config.verify_expire_in,
+  });
+
   const isTokenValid = jwtHelpers.verifyToken(token, config.verify_token!);
 
   if (!isTokenValid) {
     throw new ApiError(httpStatus.FORBIDDEN, 'Invalid token.');
   }
+  console.log({ isTokenValid });
 
-  const user = await prisma.user.findUnique(isTokenValid.id);
+  const user = await prisma.user.findFirst({
+    where: {
+      id: isTokenValid?.id,
+    },
+  });
 
   if (user?.status === 'BLOCKED') {
     throw new ApiError(httpStatus.FORBIDDEN, 'Your account is blocked.');
