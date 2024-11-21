@@ -49,6 +49,11 @@
             "date": 1732122480162,
             "name": "D:\\projects\\code-wizard\\api\\logs\\winston\\errors\\phu-2024-20-11-23-error.log",
             "hash": "8ce241b12e9b302917382eb3d658216632e87c9890bb8495d73bb6e393b9af49"
+        },
+        {
+            "date": 1732172497251,
+            "name": "D:\\projects\\code-wizard\\api\\logs\\winston\\errors\\phu-2024-21-11-13-error.log",
+            "hash": "877aa7fd34066e9a0087c21215666a9bf0b53b00f34e89c63bc7a8213636d3f9"
         }
     ],
     "hashType": "sha256"
