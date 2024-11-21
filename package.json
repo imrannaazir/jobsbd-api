@@ -8,6 +8,8 @@
     "ass": "ts-node-dev --respawn --transpile-only assignment.ts",
     "prod": "NODE_ENV=production ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
+    "start": "node ./dist/server.js",
+    "postinstall": "prisma generate",
     "lint:check": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "lint:fix": "eslint . --fix",
     "prettier:check": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
