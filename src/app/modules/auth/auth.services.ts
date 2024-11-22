@@ -35,7 +35,7 @@ const register = async (payload: TRegister) => {
         password: hashPassword,
         phoneNumber: payload.phoneNumber,
         role: payload.role,
-        status: 'PENDING',
+        status: 'ACTIVE',
       },
       select: {
         id: true,
