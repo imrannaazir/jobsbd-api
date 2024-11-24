@@ -9,11 +9,16 @@ expectedSalary Int @default(0)
 employmentType EMPLOYMENT_TYPE
 jobLevel JOB_LEVEL
 bio String
+address Address @relation(fields: [addressId],references: [id])
 addressId String @unique
-address Address? @relation(fields: [addressId],references: [id])
 resume String?
 skills Skill[]
 educations Education[]
+projects Project[]
+socials Social[]
+languages Language[]
+trainings Training[]
+experiences Experience[]
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 }

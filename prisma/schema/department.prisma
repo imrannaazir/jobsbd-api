@@ -1,9 +1,7 @@
-model Address {
+model Department {
 id String @id @unique @default(uuid())
-district String
-addressLine String
-candidate Candidate?
-experience Experience?
+name String
+experiences Experience[]
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 }

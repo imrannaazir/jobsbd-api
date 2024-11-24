@@ -1,0 +1,20 @@
+model Experience {
+id String @id @unique @default(uuid())
+candidateId String
+candidate Candidate @relation(fields: [candidateId],references: [id])
+industryId String
+industry Industry @relation(fields: [industryId],references: [id])
+departmentId String
+department Department @relation(fields: [departmentId],references: [id])
+locationId String @unique
+location Address @relation(fields: [locationId],references: [id])
+designation String
+employmentType EMPLOYMENT_TYPE
+companyName String
+startDate DateTime
+endDate DateTime
+isWorking Boolean @default(false)
+jobResponsibilities String
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
