@@ -1,19 +1,15 @@
-
-
 model User {
-id String @id @unique @default(uuid())
-email String
-phoneNumber String
-password String
-role Role
-status STATUS
-candidate Candidate?
-employer Employer? 
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-
+    id          String     @id @unique @default(uuid())
+    email       String
+    phoneNumber String
+    password    String
+    role        Role
+    status      STATUS
+    candidate   Candidate?
+    employer    Employer?
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
 }
-
 
 enum Role {
     ADMIN
@@ -26,5 +22,4 @@ enum STATUS {
     PENDING
     ACTIVE
     BLOCKED
-
 }

@@ -1,16 +1,16 @@
 model Language {
-id String @id @unique @default(uuid())
-language String
-proficiency PROFICIENCY
-candidateId String
-candidate Candidate @relation(fields: [candidateId],references: [id])
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+    id          String      @id @unique @default(uuid())
+    language    String
+    proficiency PROFICIENCY
+    candidateId String
+    candidate   Candidate   @relation(fields: [candidateId], references: [id])
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
 }
 
 enum PROFICIENCY {
-BASIC
-FLUENT
-NATIVE
-CONVERSATIONAL
+    BASIC
+    FLUENT
+    NATIVE
+    CONVERSATIONAL
 }

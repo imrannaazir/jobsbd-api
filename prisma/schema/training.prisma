@@ -1,14 +1,14 @@
 model Training {
-id String @id @unique @default(uuid())
-certificateName String
-institution String
-startDate DateTime
-endDate DateTime
-duration Int
-certificateUrl String
-description String
-candidateId String
-candidate Candidate @relation(fields: [candidateId],references: [id])
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+    id              String    @id @unique @default(uuid())
+    certificateName String
+    institution     String
+    startDate       DateTime
+    endDate         DateTime
+    duration        Int
+    certificateUrl  String
+    description     String
+    candidateId     String
+    candidate       Candidate @relation(fields: [candidateId], references: [id])
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
 }

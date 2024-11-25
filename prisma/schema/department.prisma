@@ -1,7 +1,7 @@
 model Department {
-id String @id @unique @default(uuid())
-name String
-experiences Experience[]
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+    id          String       @id @unique @default(uuid())
+    name        String
+    experiences Experience[]
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
 }

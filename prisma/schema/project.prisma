@@ -1,14 +1,14 @@
 model Project {
-id String @id @unique @default(uuid())
-title String
-companyName String?
-description String
-projectLink String?
-startDate DateTime
-endDate DateTime
-isWorking Boolean @default(false)
-candidateId String
-candidate Candidate @relation(fields: [candidateId],references: [id]) 
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+    id          String    @id @unique @default(uuid())
+    title       String
+    companyName String?
+    description String
+    projectLink String?
+    startDate   DateTime
+    endDate     DateTime
+    isWorking   Boolean   @default(false)
+    candidateId String
+    candidate   Candidate @relation(fields: [candidateId], references: [id])
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
 }

@@ -1,9 +1,9 @@
 model Social {
-id String @id @unique @default(uuid())
-name String
-url String
-candidateId String
-candidate Candidate @relation(fields: [candidateId],references: [id])
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+    id          String    @id @unique @default(uuid())
+    name        String
+    url         String
+    candidateId String
+    candidate   Candidate @relation(fields: [candidateId], references: [id])
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
 }
