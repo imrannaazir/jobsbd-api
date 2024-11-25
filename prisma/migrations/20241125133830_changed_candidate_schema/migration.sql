@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Candidate" ALTER COLUMN "bio" DROP NOT NULL,
+ALTER COLUMN "employmentType" DROP NOT NULL,
+ALTER COLUMN "expectedSalary" DROP NOT NULL,
+ALTER COLUMN "jobLevel" DROP NOT NULL,
+ALTER COLUMN "totalExperience" DROP NOT NULL;
