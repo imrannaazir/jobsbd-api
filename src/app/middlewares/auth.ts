@@ -14,6 +14,7 @@ const auth = (...roles: string[]) => {
   ) => {
     try {
       const token = req.headers.authorization;
+
       if (!token) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'You are not authorized');
       }
@@ -21,8 +22,11 @@ const auth = (...roles: string[]) => {
         token,
         config.jwt__access_secret as string,
       );
-
-      const user = await prisma.user.findUnique(verifiedUser?.id);
+      const user = await prisma.user.findUniqueOrThrow({
+        where: {
+          id: verifiedUser.id,
+        },
+      });
 
       if (user?.status === STATUS.BLOCKED) {
         throw new ApiError(httpStatus.FORBIDDEN, 'Your account is blocked.');

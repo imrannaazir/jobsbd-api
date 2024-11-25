@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import AddressRoute from '../modules/address/address.routes';
 import AuthRoutes from '../modules/auth/auth.routes';
+import IndustryRoutes from '../modules/industry/industry.routes';
 
 const router = Router();
 type TRouteModule = {
@@ -13,8 +13,8 @@ const moduleRoutes: TRouteModule[] = [
     route: AuthRoutes,
   },
   {
-    path: '/address',
-    route: AddressRoute,
+    path: '/industry',
+    route: IndustryRoutes,
   },
 ];
 
