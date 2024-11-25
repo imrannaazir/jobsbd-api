@@ -13,6 +13,10 @@ router.put(
   validateRequest(CandidateValidationSchema.updateCandidateValidationSchema),
   CandidateControllers.updateCandidate,
 );
-
+router.get(
+  '/me',
+  auth(Role.CANDIDATE),
+  CandidateControllers.getMyCandidateData,
+);
 const CandidateRoutes = router;
 export default CandidateRoutes;

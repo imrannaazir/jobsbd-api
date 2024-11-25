@@ -9,7 +9,6 @@ const updateCandidate = async (
 ) => {
   const candidate = await prisma.candidate.findUnique({
     where: { userId },
-    include: { address: true },
   });
 
   if (!candidate) {
@@ -52,5 +51,17 @@ const updateCandidate = async (
   return result;
 };
 
-const CandidateServices = { updateCandidate };
+const getMyCandidateData = async (userId: string) => {
+  const candidate = await prisma.candidate.findFirstOrThrow({
+    where: {
+      userId,
+    },
+    include: {
+      address: true,
+    },
+  });
+  return candidate;
+};
+
+const CandidateServices = { updateCandidate, getMyCandidateData };
 export default CandidateServices;
