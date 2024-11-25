@@ -56,6 +56,7 @@ const register = async (payload: TRegister) => {
         },
       });
     } else {
+     
       await transactionClient.candidate.create({
         data: {
           fullName: payload.fullName!,
