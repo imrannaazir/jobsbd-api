@@ -3,6 +3,7 @@ import AuthRoutes from '../modules/auth/auth.routes';
 import CandidateRoutes from '../modules/candidate/candidate.routes';
 import DepartmentRoutes from '../modules/department/department.routes';
 import IndustryRoutes from '../modules/industry/industry.routes';
+import ProjectRoutes from '../modules/project/project.routes';
 
 const router = Router();
 type TRouteModule = {
@@ -26,6 +27,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/department',
     route: DepartmentRoutes,
+  },
+  {
+    path: '/project',
+    route: ProjectRoutes,
   },
 ];
 
