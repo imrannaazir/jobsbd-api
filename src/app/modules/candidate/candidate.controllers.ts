@@ -5,6 +5,7 @@ import CandidateServices from './candidate.services';
 
 const updateCandidate = catchAsync(async (req, res) => {
   const payload = req.body;
+
   const userId = req.user?.id;
   const result = await CandidateServices.updateCandidate(payload, userId!);
   sendResponse(res, {

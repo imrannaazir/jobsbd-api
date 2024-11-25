@@ -9,8 +9,7 @@ model Candidate {
     employmentType  EMPLOYMENT_TYPE?
     jobLevel        JOB_LEVEL?
     bio             String?
-    address         Address?         @relation(fields: [addressId], references: [id])
-    addressId       String?          @unique
+    address         Address?
     resume          String?
     skills          Skill[]
     educations      Education[]

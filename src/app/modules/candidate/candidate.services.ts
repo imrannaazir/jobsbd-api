@@ -1,32 +1,55 @@
-import { Address, Candidate } from '@prisma/client';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
 import prisma from '../../../shared/prisma';
+import { CandidateUpdatePayload } from './candidate.types';
 
 const updateCandidate = async (
-  payload: Candidate & Address,
+  payload: CandidateUpdatePayload,
   userId: string,
 ) => {
-  const isCandidateExist = await prisma.candidate.findFirst({
-    where: {
-      userId,
-    },
+  const candidate = await prisma.candidate.findUnique({
+    where: { userId },
+    include: { address: true },
   });
 
-  if (!isCandidateExist?.id) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Candidate is not founded.');
+  if (!candidate) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Candidate not found.');
   }
 
-  const addressPayload: Partial<Address> = {};
+  const { addressLine, district, ...candidateData } = payload;
 
-  addressPayload.addressLine = payload.addressLine;
-  addressPayload.district = payload.district;
+  const result = await prisma.$transaction(async transactionClient => {
+    if (addressLine !== undefined || district !== undefined) {
+      await transactionClient.address.upsert({
+        where: {
+          candidateId: candidate.id,
+        },
+        create: {
+          addressLine: addressLine ?? '',
+          district: district ?? '',
+          candidateId: candidate.id,
+        },
+        update: {
+          addressLine: addressLine !== undefined ? addressLine : undefined,
+          district: district !== undefined ? district : undefined,
+        },
+      });
+    }
 
-  const candidatePayload = payload;
-  delete candidatePayload.addressLine;
-  delete candidatePayload.district;
+    const updatedCandidate = await transactionClient.candidate.update({
+      where: {
+        id: candidate.id,
+      },
+      data: candidateData,
+      include: {
+        address: true,
+      },
+    });
 
-  const result = await prisma.$transaction(async transactionClient => {});
+    return updatedCandidate;
+  });
+
+  return result;
 };
 
 const CandidateServices = { updateCandidate };

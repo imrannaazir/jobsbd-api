@@ -2,8 +2,10 @@ model Address {
     id          String      @id @unique @default(uuid())
     district    String
     addressLine String
-    candidate   Candidate?
-    experience  Experience?
+    candidateId String? @unique
+    candidate Candidate? @relation(fields: [candidateId],references: [id])
+    experienceId String? @unique
+    experience  Experience? @relation(fields: [experienceId],references: [id])
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
 }
