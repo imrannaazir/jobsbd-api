@@ -4,9 +4,9 @@ model Training {
     institution     String
     startDate       DateTime
     endDate         DateTime
-    duration        Int
-    certificateUrl  String
-    description     String
+    duration        String
+    certificateUrl  String?
+    description     String?
     candidateId     String
     candidate       Candidate @relation(fields: [candidateId], references: [id])
     createdAt       DateTime  @default(now())

@@ -4,6 +4,7 @@ import CandidateRoutes from '../modules/candidate/candidate.routes';
 import DepartmentRoutes from '../modules/department/department.routes';
 import IndustryRoutes from '../modules/industry/industry.routes';
 import ProjectRoutes from '../modules/project/project.routes';
+import TrainingRoutes from '../modules/training/training.routes';
 
 const router = Router();
 type TRouteModule = {
@@ -31,6 +32,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/project',
     route: ProjectRoutes,
+  },
+  {
+    path: '/trainings',
+    route: TrainingRoutes,
   },
 ];
 
