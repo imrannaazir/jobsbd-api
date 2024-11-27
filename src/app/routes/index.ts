@@ -2,12 +2,13 @@ import { Router } from 'express';
 import AuthRoutes from '../modules/auth/auth.routes';
 import CandidateRoutes from '../modules/candidate/candidate.routes';
 import DepartmentRoutes from '../modules/department/department.routes';
-import IndustryRoutes from '../modules/industry/industry.routes';
-import ProjectRoutes from '../modules/project/project.routes';
-import TrainingRoutes from '../modules/training/training.routes';
 import EducationRoutes from '../modules/education/education.routes';
+import ExperienceRoutes from '../modules/experience/experience.routes';
+import IndustryRoutes from '../modules/industry/industry.routes';
 import LanguageRoutes from '../modules/language/language.routes';
+import ProjectRoutes from '../modules/project/project.routes';
 import SocialRoutes from '../modules/social/social.routes';
+import TrainingRoutes from '../modules/training/training.routes';
 
 const router = Router();
 type TRouteModule = {
@@ -51,6 +52,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/socials',
     route: SocialRoutes,
+  },
+  {
+    path: '/experience',
+    route: ExperienceRoutes,
   },
 ];
 

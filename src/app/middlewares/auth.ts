@@ -14,7 +14,6 @@ const auth = (...roles: string[]) => {
   ) => {
     try {
       const token = req.headers.authorization;
-
       if (!token) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'You are not authorized');
       }
