@@ -2,9 +2,9 @@ import prisma from '../../../shared/prisma';
 import { TEducation, TUpdateEducation } from './education.types';
 
 const getCandidateEducationsFromDB = async (userId: string) => {
-  const candidate = await prisma.user.findFirst({
+  const candidate = await prisma.candidate.findFirst({
     where: {
-      id: userId,
+      userId,
     },
   });
   if (!candidate) {
@@ -13,7 +13,7 @@ const getCandidateEducationsFromDB = async (userId: string) => {
 
   const result = await prisma.education.findMany({
     where: {
-      candidateId: userId,
+      candidateId: candidate.id,
     },
   });
 
@@ -24,11 +24,12 @@ const createCandidateEducationInDB = async (
   payload: TEducation,
   userId: string,
 ) => {
-  const candidate = await prisma.user.findFirst({
+  const candidate = await prisma.candidate.findFirst({
     where: {
-      id: userId,
+      userId,
     },
   });
+
   if (!candidate) {
     throw new Error('Candidate not found');
   }
@@ -46,10 +47,17 @@ const createCandidateEducationInDB = async (
 const updateCandidateEducationInDB = async (
   educationId: string,
   payload: TUpdateEducation,
+  userId: string,
 ) => {
+  const candidate = await prisma.candidate.findFirstOrThrow({
+    where: {
+      userId,
+    },
+  });
   const updatedEducation = await prisma.education.update({
     where: {
       id: educationId,
+      candidateId: candidate.id,
     },
     data: payload,
   });
@@ -57,10 +65,19 @@ const updateCandidateEducationInDB = async (
   return updatedEducation;
 };
 
-const deleteCandidateEducationFromDB = async (educationId: string) => {
+const deleteCandidateEducationFromDB = async (
+  educationId: string,
+  userId: string,
+) => {
+  const candidate = await prisma.candidate.findFirstOrThrow({
+    where: {
+      userId,
+    },
+  });
   const deletedEducation = await prisma.education.delete({
     where: {
       id: educationId,
+      candidateId: candidate?.id,
     },
   });
 

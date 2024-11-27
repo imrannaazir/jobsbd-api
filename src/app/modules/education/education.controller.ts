@@ -33,10 +33,12 @@ const createCandidateEducation = catchAsync(async (req, res) => {
 
 const updateCandidateEducation = catchAsync(async (req, res) => {
   const { educationId } = req.params;
+  const userId = req.user?.id;
   const payload = req.body;
   const result = await EducationServices.updateCandidateEducationInDB(
     educationId,
     payload,
+    userId!,
   );
 
   sendResponse(res, {
@@ -49,14 +51,16 @@ const updateCandidateEducation = catchAsync(async (req, res) => {
 
 const deleteCandidateEducation = catchAsync(async (req, res) => {
   const { educationId } = req.params;
-
-  const result =
-    await EducationServices.deleteCandidateEducationFromDB(educationId);
+  const userId = req.user?.id;
+  const result = await EducationServices.deleteCandidateEducationFromDB(
+    educationId,
+    userId!,
+  );
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
-    message: 'Education created successfully.',
+    message: 'Education deleted successfully.',
     data: result,
   });
 });
