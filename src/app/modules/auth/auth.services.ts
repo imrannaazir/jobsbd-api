@@ -56,7 +56,6 @@ const register = async (payload: TRegister) => {
         },
       });
     } else {
-     
       await transactionClient.candidate.create({
         data: {
           fullName: payload.fullName!,
@@ -65,32 +64,32 @@ const register = async (payload: TRegister) => {
       });
     }
 
-    const verifyToken = jwtHelpers.generateToken(
-      {
-        id: newUser.id,
-        email: newUser.email,
-        role: newUser.role,
-      },
-      config.verify_token as string,
-      config.verify_expire_in as string,
-    );
-
-    const verifyAccountLink = `${config.client_origin}/verify-token?&token=${verifyToken}`;
-    await emailSender(
-      newUser.email,
-      `
-          <div>
-          <p>Dear ${newUser.email}</p>
-          <p>Your account verification link:</p>
-          <a href=${verifyAccountLink}>
-          <button>Click here to Verify Account</button>
-          </a>
-          </div>
-      `,
-    );
-
     return newUser;
   });
+
+  const verifyToken = jwtHelpers.generateToken(
+    {
+      id: result.id,
+      email: result.email,
+      role: result.role,
+    },
+    config.verify_token as string,
+    config.verify_expire_in as string,
+  );
+
+  const verifyAccountLink = `${config.client_origin}/verify-token?&token=${verifyToken}`;
+  await emailSender(
+    result.email,
+    `
+        <div>
+        <p>Dear ${result.email}</p>
+        <p>Your account verification link:</p>
+        <a href=${verifyAccountLink}>
+        <button>Click here to Verify Account</button>
+        </a>
+        </div>
+    `,
+  );
 
   return result;
 };
