@@ -49,13 +49,20 @@ const register = async (payload: TRegister) => {
     });
 
     if (payload.role === 'EMPLOYER') {
-      await transactionClient.employer.create({
+      if (!payload.companyName) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Company name is required.');
+      }
+
+      await transactionClient.company.create({
         data: {
           companyName: payload.companyName!,
           userId: newUser?.id,
         },
       });
     } else {
+      if (!payload.fullName) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Fullname is required.');
+      }
       await transactionClient.candidate.create({
         data: {
           fullName: payload.fullName!,
@@ -127,7 +134,7 @@ const verifyAccount = async (token: string) => {
 const login = async (payload: TLogin) => {
   const isUserAlreadyExist = await prisma.user.findFirst({
     where: {
-      AND: [{ email: payload.email }],
+      OR: [{ email: payload.email }, { phoneNumber: payload.phoneNumber }],
     },
   });
 
