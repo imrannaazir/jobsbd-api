@@ -6,6 +6,8 @@ import IndustryRoutes from '../modules/industry/industry.routes';
 import ProjectRoutes from '../modules/project/project.routes';
 import TrainingRoutes from '../modules/training/training.routes';
 import EducationRoutes from '../modules/education/education.routes';
+import LanguageRoutes from '../modules/language/language.routes';
+import SocialRoutes from '../modules/social/social.routes';
 
 const router = Router();
 type TRouteModule = {
@@ -41,6 +43,14 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/education',
     route: EducationRoutes,
+  },
+  {
+    path: '/languages',
+    route: LanguageRoutes,
+  },
+  {
+    path: '/socials',
+    route: SocialRoutes,
   },
 ];
 
