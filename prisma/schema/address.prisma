@@ -1,11 +1,15 @@
 model Address {
-    id          String      @id @unique @default(uuid())
-    district    String
-    addressLine String
-    candidateId String? @unique
-    candidate Candidate? @relation(fields: [candidateId],references: [id])
-    experienceId String? @unique
-    experience  Experience? @relation(fields: [experienceId],references: [id])
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
+    id                         String      @id @unique @default(uuid())
+    district                   String
+    addressLine                String
+    candidateId                String? @unique
+    candidate                  Candidate? @relation(fields: [candidateId],references: [id])
+    experienceId               String? @unique
+    experience                 Experience? @relation(fields: [experienceId],references: [id])
+    companyId                  String? @unique
+    jobId                      String? @unique             
+    job                        Job? @relation(fields: [jobId],references: [id])
+    company                    Company? @relation(fields: [companyId],references: [id])
+    createdAt                  DateTime    @default(now())
+    updatedAt                  DateTime    @updatedAt
 }

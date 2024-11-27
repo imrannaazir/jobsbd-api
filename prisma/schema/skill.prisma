@@ -2,8 +2,10 @@ model Skill {
     id          String    @id @unique @default(uuid())
     skill       String
     duration    Int
-    candidate   Candidate @relation(fields: [candidateId], references: [id])
-    candidateId String
+    candidate   Candidate? @relation(fields: [candidateId], references: [id])
+    candidateId String?
+    jobId       String?
+    job         Job? @relation(fields: [jobId],references: [id])
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
 }

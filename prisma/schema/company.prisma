@@ -1,8 +1,16 @@
 model Company {
-    id          String   @id @unique @default(uuid())
-    user        User     @relation(fields: [userId], references: [id])
-    userId      String   @unique
-    companyName String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    id                String   @id @unique @default(uuid())
+    user              User     @relation(fields: [userId], references: [id])
+    userId            String   @unique
+    companyName       String
+    websiteLink       String?
+    foundedDate       DateTime?
+    businessType      String?
+    numberOfEmployees Int?
+    numberOfOffices   Int?
+    image             String?
+    companyDetails    String?
+    address           Address?
+    createdAt         DateTime @default(now())
+    updatedAt         DateTime @updatedAt
 }
