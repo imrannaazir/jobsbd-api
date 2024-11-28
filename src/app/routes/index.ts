@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import AuthRoutes from '../modules/auth/auth.routes';
 import CandidateRoutes from '../modules/candidate/candidate.routes';
+import CompanyRoutes from '../modules/company/company.routes';
 import DepartmentRoutes from '../modules/department/department.routes';
 import EducationRoutes from '../modules/education/education.routes';
 import ExperienceRoutes from '../modules/experience/experience.routes';
@@ -61,6 +62,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/skills',
     route: SkillRoutes,
+  },
+  {
+    path: '/companies',
+    route: CompanyRoutes,
   },
 ];
 

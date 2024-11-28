@@ -7,9 +7,9 @@ model Address {
     experienceId               String? @unique
     experience                 Experience? @relation(fields: [experienceId],references: [id])
     companyId                  String? @unique
+    company                    Company? @relation(fields: [companyId],references: [id])
     jobId                      String? @unique             
     job                        Job? @relation(fields: [jobId],references: [id])
-    company                    Company? @relation(fields: [companyId],references: [id])
     createdAt                  DateTime    @default(now())
     updatedAt                  DateTime    @updatedAt
 }
