@@ -178,6 +178,7 @@ const login = async (payload: TLogin) => {
   return {
     id: isUserAlreadyExist.id,
     email: isUserAlreadyExist.email,
+    phoneNumber: isUserAlreadyExist?.phoneNumber,
     accessToken,
     refreshToken,
   };
