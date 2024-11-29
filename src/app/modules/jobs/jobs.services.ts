@@ -1,4 +1,6 @@
 import { Address, Job } from '@prisma/client';
+import httpStatus from 'http-status';
+import ApiError from '../../../errors/ApiError';
 import prisma from '../../../shared/prisma';
 
 const createJob = async (
@@ -54,7 +56,49 @@ const createJob = async (
   return result;
 };
 
+const deleteJob = async (jobId: string, userId: string) => {
+  const isJobsExists = await prisma.job.findUnique({
+    where: {
+      id: jobId,
+    },
+  });
+  if (!isJobsExists) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Job not found');
+  }
+  const result = await prisma.$transaction(async transactionClient => {
+    await transactionClient.skill.deleteMany({
+      where: { jobId },
+    });
+
+    await transactionClient.address.delete({
+      where: { jobId },
+    });
+    const job = await transactionClient.job.delete({
+      where: {
+        id: jobId,
+        userId,
+      },
+    });
+
+    return job;
+  });
+
+  return result;
+};
+
+const getSingleJob = async (jobId: string, userId: string) => {
+  const result = await prisma.job.findUniqueOrThrow({
+    where: {
+      id: jobId,
+      userId: userId,
+    },
+  });
+  return result;
+};
+
 const JobsServices = {
   createJob,
+  deleteJob,
+  getSingleJob,
 };
 export default JobsServices;

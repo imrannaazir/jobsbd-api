@@ -12,6 +12,8 @@ router.post(
   validateRequest(JobValidations.createJobValidationSchema),
   JobControllers.createJob,
 );
+router.delete('/:jobId', auth(Role.EMPLOYER), JobControllers.deleteJob);
+router.get('/:jobId', auth(Role.EMPLOYER), JobControllers.getSingleJob);
 
 const JobsRoutes = router;
 

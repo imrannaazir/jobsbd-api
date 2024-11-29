@@ -14,7 +14,31 @@ const createJob = catchAsync(async (req: Request & { user?: any }, res) => {
     success: true,
   });
 });
+
+const deleteJob = catchAsync(async (req: Request & { user?: any }, res) => {
+  const user = req.user.id;
+  const result = await JobsServices.deleteJob(req.params.jobId, user);
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    message: 'Job deleted successfully',
+    data: result,
+    success: true,
+  });
+});
+const getSingleJob = catchAsync(async (req: Request & { user?: any }, res) => {
+  const user = req.user.id;
+  const result = await JobsServices.getSingleJob(req.params.jobId, user);
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    message: 'Jobs retrieved successfully',
+    data: result,
+    success: true,
+  });
+});
+
 const JobControllers = {
   createJob,
+  deleteJob,
+  getSingleJob,
 };
 export default JobControllers;
