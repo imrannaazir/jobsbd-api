@@ -1,25 +1,27 @@
-model Job{ 
-    id                 String   @id @unique @default(uuid())
-    title              String
-    vacancy            Int
-    deadline           DateTime
-    minSalary          Float
-    maxSalary          Float
-    experienceInMonths Int?
-    jobType            EMPLOYMENT_TYPE
-    minAge             Int?
-    jobDescription             String?
-    jobRequirements            String?
-    degreeName                 String
-    degreeTitle                String
+model Job {
+    id                   String          @id @unique @default(uuid())
+    title                String
+    vacancy              Int
+    deadline             DateTime
+    minSalary            Float
+    maxSalary            Float
+    experienceInMonths   Int?
+    jobType              EMPLOYMENT_TYPE
+    minAge               Int?
+    jobDescription       String?
+    jobRequirements      String?
+    degreeName           String
+    degreeTitle          String
     compensationBenefits String?
-    negotiable         Boolean
-    industryId         String @unique
-    industry           Industry @relation(fields: [industryId],references: [id])
-    departmentId       String @unique
-    department         Department @relation(fields: [departmentId],references: [id])
-    address            Address?
-    skills             Skill[]
-    createdAt          DateTime @default(now())
-    updatedAt          DateTime @updatedAt
+    negotiable           Boolean
+    industryId           String          @unique
+    industry             Industry        @relation(fields: [industryId], references: [id])
+    departmentId         String          @unique
+    department           Department      @relation(fields: [departmentId], references: [id])
+    userId               String
+    user                 User            @relation(fields: [userId], references: [id])
+    address              Address?
+    skills               Skill[]
+    createdAt            DateTime        @default(now())
+    updatedAt            DateTime        @updatedAt
 }

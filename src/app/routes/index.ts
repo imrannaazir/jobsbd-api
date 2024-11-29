@@ -6,6 +6,7 @@ import DepartmentRoutes from '../modules/department/department.routes';
 import EducationRoutes from '../modules/education/education.routes';
 import ExperienceRoutes from '../modules/experience/experience.routes';
 import IndustryRoutes from '../modules/industry/industry.routes';
+import JobsRoutes from '../modules/jobs/jobs.routes';
 import LanguageRoutes from '../modules/language/language.routes';
 import ProjectRoutes from '../modules/project/project.routes';
 import SkillRoutes from '../modules/skill/skill.routes';
@@ -66,6 +67,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/companies',
     route: CompanyRoutes,
+  },
+  {
+    path: '/job',
+    route: JobsRoutes,
   },
 ];
 
