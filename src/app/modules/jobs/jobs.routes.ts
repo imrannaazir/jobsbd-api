@@ -13,7 +13,7 @@ router.post(
   JobControllers.createJob,
 );
 router.delete('/:jobId', auth(Role.EMPLOYER), JobControllers.deleteJob);
-router.get('/:jobId', auth(Role.EMPLOYER), JobControllers.getSingleJob);
+router.get('/:jobId', JobControllers.getSingleJob);
 
 const JobsRoutes = router;
 

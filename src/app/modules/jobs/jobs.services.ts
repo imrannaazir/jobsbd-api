@@ -8,6 +8,12 @@ const createJob = async (
   userId: string,
 ) => {
   const result = await prisma.$transaction(async transactionClient => {
+    const company = await prisma.company.findFirstOrThrow({
+      where: {
+        userId,
+      },
+    });
+
     const job = await transactionClient.job.create({
       data: {
         title: payload.title,
@@ -26,7 +32,7 @@ const createJob = async (
         negotiable: payload.negotiable,
         industryId: payload.industryId,
         departmentId: payload.departmentId,
-        userId: userId,
+        companyId: company.id,
       },
     });
 
@@ -57,6 +63,11 @@ const createJob = async (
 };
 
 const deleteJob = async (jobId: string, userId: string) => {
+  const company = await prisma.company.findFirstOrThrow({
+    where: {
+      userId,
+    },
+  });
   const isJobsExists = await prisma.job.findUnique({
     where: {
       id: jobId,
@@ -76,7 +87,7 @@ const deleteJob = async (jobId: string, userId: string) => {
     const job = await transactionClient.job.delete({
       where: {
         id: jobId,
-        userId,
+        companyId: company.id,
       },
     });
 
@@ -86,11 +97,10 @@ const deleteJob = async (jobId: string, userId: string) => {
   return result;
 };
 
-const getSingleJob = async (jobId: string, userId: string) => {
+const getSingleJob = async (jobId: string) => {
   const result = await prisma.job.findUniqueOrThrow({
     where: {
       id: jobId,
-      userId: userId,
     },
   });
   return result;

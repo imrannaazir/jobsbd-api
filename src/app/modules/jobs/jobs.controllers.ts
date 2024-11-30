@@ -26,8 +26,7 @@ const deleteJob = catchAsync(async (req: Request & { user?: any }, res) => {
   });
 });
 const getSingleJob = catchAsync(async (req: Request & { user?: any }, res) => {
-  const user = req.user.id;
-  const result = await JobsServices.getSingleJob(req.params.jobId, user);
+  const result = await JobsServices.getSingleJob(req.params.jobId);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     message: 'Jobs retrieved successfully',

@@ -58,6 +58,7 @@ const getMyCandidateData = async (userId: string) => {
     },
     include: {
       address: true,
+      user: true,
     },
   });
   return candidate;

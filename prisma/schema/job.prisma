@@ -18,8 +18,8 @@ model Job {
     industry             Industry        @relation(fields: [industryId], references: [id])
     departmentId         String          @unique
     department           Department      @relation(fields: [departmentId], references: [id])
-    userId               String
-    user                 User            @relation(fields: [userId], references: [id])
+    companyId            String
+    company              Company            @relation(fields: [companyId], references: [id])
     address              Address?
     skills               Skill[]
     createdAt            DateTime        @default(now())
