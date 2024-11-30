@@ -9,6 +9,7 @@ export const educationValidationSchema = z.object({
     currentlyStudying: z.boolean().optional(),
     grade: z.number(),
     fieldOfStudy: z.string(),
+    description: z.string().optional(),
   }),
 });
 export const educationUpdateValidationSchema = z.object({
