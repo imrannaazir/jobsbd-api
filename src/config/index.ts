@@ -22,8 +22,14 @@ export default {
   verify_token: process.env.VERIFY_TOKEN,
   verify_expire_in: process.env.VERIFY_TOKEN_EXPIRE_IN,
   client_origin: process.env.CLIENT_ORIGIN,
+  client_origin_2: process.env.CLIENT_ORIGIN_2,
   emailSender: {
     email: process.env.EMAIL,
     app_password: process.env.APP_PASSWORD,
+  },
+  super_admin: {
+    email: process.env.SUPER_ADMIN_EMAIL,
+    password: process.env.SUPER_ADMIN_PASSWORD,
+    phone_number: process.env.SUPER_ADMIN_PHONE_NUMBER,
   },
 };
