@@ -5,8 +5,8 @@ model Education {
     degree            String
     instituteName     String
     startDate         DateTime
-    endDate           DateTime
-    currentlyStudying Boolean   @default(false)
+    endDate           DateTime?
+    currentlyStudying Boolean?   @default(false)
     grade             Float
     fieldOfStudy      String
     createdAt DateTime @default(now())
