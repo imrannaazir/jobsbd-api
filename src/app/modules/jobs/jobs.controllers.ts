@@ -1,9 +1,10 @@
 import { Request } from 'express';
 import httpStatus from 'http-status';
-import { OptionsFields } from '../../../helpers/paginationHelper';
+import { IOptions, OptionsFields } from '../../../helpers/paginationHelper';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
+import { TJobFilters } from './job.types';
 import { JobFilterableFields } from './jobs.constants';
 import JobsServices from './jobs.services';
 
@@ -40,8 +41,8 @@ const getSingleJob = catchAsync(async (req: Request & { user?: any }, res) => {
 });
 
 const getAllJobs = catchAsync(async (req, res) => {
-  const options = pick(req.query, OptionsFields);
-  const filters = pick(req.query, JobFilterableFields);
+  const options = pick(req.query, OptionsFields) as IOptions;
+  const filters = pick(req.query, JobFilterableFields) as TJobFilters;
   const result = await JobsServices.getAllJobs(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,

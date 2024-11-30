@@ -4,7 +4,6 @@ export const JobFilterableFields = [
   'industry',
   'department',
   'minExperience',
-  'maxExperience',
   'minSalary',
   'maxSalary',
   'negotiable',

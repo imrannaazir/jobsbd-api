@@ -1,4 +1,4 @@
-import { Address, Job } from '@prisma/client';
+import { Address, Job, Prisma } from '@prisma/client';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
 import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
@@ -114,19 +114,97 @@ const getAllJobs = async (filters: TJobFilters, options: IOptions) => {
   const industry = filters.industry;
   const department = filters.department;
   const minExperience = Number(filters.minExperience);
-  const maxExperience = Number(filters.maxExperience);
   const minSalary = Number(filters.minSalary);
   const maxSalary = Number(filters.maxSalary);
-  const negotiable = filters.negotiable.toLowerCase() === 'true';
+  const negotiable = filters.negotiable && filters.negotiable.toLowerCase();
 
   const { limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(options);
 
+  const whereOptions: Prisma.JobWhereInput = {};
+
+  if (negotiable) {
+    whereOptions.negotiable = negotiable === 'true';
+  }
+
+  if (query) {
+    whereOptions.OR = [
+      {
+        title: {
+          contains: String(query),
+          mode: 'insensitive',
+        },
+      },
+      {
+        company: {
+          companyName: {
+            contains: String(query),
+            mode: 'insensitive',
+          },
+        },
+      },
+    ];
+  }
+
+  if (location) {
+    whereOptions.address = {
+      OR: [
+        {
+          addressLine: { contains: String(location), mode: 'insensitive' },
+        },
+        {
+          district: { contains: String(location), mode: 'insensitive' },
+        },
+      ],
+    };
+  }
+
+  if (industry) {
+    whereOptions.industry = {
+      name: {
+        contains: String(industry),
+        mode: 'insensitive',
+      },
+    };
+  }
+
+  if (department) {
+    whereOptions.department = {
+      name: {
+        contains: String(department),
+        mode: 'insensitive',
+      },
+    };
+  }
+
+  if (minExperience) {
+    whereOptions.experienceInMonths = {
+      gte: minExperience,
+    };
+  }
+
+  if (minSalary) {
+    whereOptions.minSalary = {
+      gte: minSalary,
+    };
+  }
+
+  if (maxSalary) {
+    whereOptions.maxSalary = {
+      lte: maxSalary,
+    };
+  }
+
   const jobs = await prisma.job.findMany({
+    where: whereOptions,
     skip,
     take: limit,
     orderBy: {
       [sortBy]: sortOrder,
+    },
+    include: {
+      department: true,
+      industry: true,
     },
   });
 
