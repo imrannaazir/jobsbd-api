@@ -1,4 +1,5 @@
-type IOptions = {
+export const OptionsFields = ['page', 'limit', 'sortBy', 'sortOrder'];
+export type IOptions = {
   page?: number;
   limit?: number;
   sortBy?: string;

@@ -14,6 +14,7 @@ router.post(
 );
 router.delete('/:jobId', auth(Role.EMPLOYER), JobControllers.deleteJob);
 router.get('/:jobId', JobControllers.getSingleJob);
+router.get('/all', JobControllers.getAllJobs);
 
 const JobsRoutes = router;
 

@@ -1,7 +1,9 @@
 import { Address, Job } from '@prisma/client';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
+import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
 import prisma from '../../../shared/prisma';
+import { TJobFilters } from './job.types';
 
 const createJob = async (
   payload: Job & Address & { skills: { skill: string; duration: number }[] },
@@ -106,9 +108,22 @@ const getSingleJob = async (jobId: string) => {
   return result;
 };
 
+const getAllJobs = async (filters: TJobFilters, options: IOptions) => {
+  const { limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(options);
+
+  console.log({
+    limit,
+    skip,
+    sortBy,
+    sortOrder,
+    filters,
+  });
+};
 const JobsServices = {
   createJob,
   deleteJob,
   getSingleJob,
+  getAllJobs,
 };
 export default JobsServices;
