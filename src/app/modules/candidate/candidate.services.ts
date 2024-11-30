@@ -58,7 +58,15 @@ const getMyCandidateData = async (userId: string) => {
     },
     include: {
       address: true,
-      user: true,
+
+      user: {
+        select: {
+          phoneNumber: true,
+          email: true,
+          role: true,
+          id: true,
+        },
+      },
     },
   });
   return candidate;

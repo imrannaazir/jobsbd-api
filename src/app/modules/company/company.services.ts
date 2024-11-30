@@ -48,6 +48,14 @@ const getMyCompany = async (userId: string): Promise<Company> => {
     },
     include: {
       address: true,
+      user: {
+        select: {
+          phoneNumber: true,
+          email: true,
+          role: true,
+          id: true,
+        },
+      },
     },
   });
 
