@@ -109,16 +109,28 @@ const getSingleJob = async (jobId: string) => {
 };
 
 const getAllJobs = async (filters: TJobFilters, options: IOptions) => {
+  const query = filters.query;
+  const location = filters.location;
+  const industry = filters.industry;
+  const department = filters.department;
+  const minExperience = Number(filters.minExperience);
+  const maxExperience = Number(filters.maxExperience);
+  const minSalary = Number(filters.minSalary);
+  const maxSalary = Number(filters.maxSalary);
+  const negotiable = filters.negotiable.toLowerCase() === 'true';
+
   const { limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(options);
 
-  console.log({
-    limit,
+  const jobs = await prisma.job.findMany({
     skip,
-    sortBy,
-    sortOrder,
-    filters,
+    take: limit,
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
   });
+
+  return jobs;
 };
 const JobsServices = {
   createJob,
