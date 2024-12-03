@@ -12,7 +12,7 @@ const toggleInSavedJob = async (
     },
   });
 
-  await prisma.user.findFirstOrThrow({
+  await prisma.job.findFirstOrThrow({
     where: {
       id: jobId,
     },

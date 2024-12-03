@@ -10,6 +10,7 @@ import IndustryRoutes from '../modules/industry/industry.routes';
 import JobsRoutes from '../modules/jobs/jobs.routes';
 import LanguageRoutes from '../modules/language/language.routes';
 import ProjectRoutes from '../modules/project/project.routes';
+import SavedJobRoutes from '../modules/saved-job/saved-job.routes';
 import SkillRoutes from '../modules/skill/skill.routes';
 import SocialRoutes from '../modules/social/social.routes';
 import TrainingRoutes from '../modules/training/training.routes';
@@ -76,6 +77,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/applied-jobs',
     route: AppliedJobRoutes,
+  },
+  {
+    path: '/saved-jobs',
+    route: SavedJobRoutes,
   },
 ];
 
