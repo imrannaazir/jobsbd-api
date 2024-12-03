@@ -3,8 +3,8 @@ model Job {
     title                String
     vacancy              Int
     deadline             DateTime
-    industryId           String          
-    departmentId         String          
+    industryId           String
+    departmentId         String
     minSalary            Float
     maxSalary            Float
     experienceInMonths   Int?
@@ -14,14 +14,15 @@ model Job {
     jobRequirements      String?
     degreeName           String
     degreeTitle          String
-    compensationBenefits String? 
+    compensationBenefits String?
     negotiable           Boolean
     industry             Industry        @relation(fields: [industryId], references: [id])
     department           Department      @relation(fields: [departmentId], references: [id])
     companyId            String
-    company              Company            @relation(fields: [companyId], references: [id])
+    company              Company         @relation(fields: [companyId], references: [id])
     address              Address?
     skills               Skill[]
+    savedJobs            SavedJob[]
     appliedJobs          AppliedJob[]
     createdAt            DateTime        @default(now())
     updatedAt            DateTime        @updatedAt

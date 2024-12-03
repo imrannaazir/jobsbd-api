@@ -3,7 +3,7 @@ import { z } from 'zod';
 const applyJobValidationSchema = z.object({
   body: z.object({
     jobId: z.string(),
-    resume: z.string(),
+    resume: z.string().optional(),
   }),
 });
 
