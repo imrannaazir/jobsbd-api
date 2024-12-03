@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import { TGenericErrorResponse } from '../../interfaces/error';
+import { TGenericErrorResponse } from '../interfaces/error';
 
 const handleGeneralError = (error: Error): TGenericErrorResponse => {
   return {

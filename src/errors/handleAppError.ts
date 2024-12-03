@@ -1,4 +1,4 @@
-import { TGenericErrorResponse } from '../../interfaces/error';
+import { TGenericErrorResponse } from '../interfaces/error';
 import ApiError from './ApiError';
 
 const handleApiError = (error: ApiError): TGenericErrorResponse => {
