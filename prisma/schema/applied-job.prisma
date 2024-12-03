@@ -7,7 +7,7 @@ model AppliedJob {
     candidate   Candidate        @relation(fields: [candidateId], references: [id])
     job         Job              @relation(fields: [jobId], references: [id])
     company     Company          @relation(fields: [companyId], references: [id])
-    resume      String
+    resume      String?
     createdAt   DateTime         @default(now())
     updatedAt   DateTime         @updatedAt
 }
