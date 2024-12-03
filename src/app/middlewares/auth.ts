@@ -21,6 +21,7 @@ const auth = (...roles: string[]) => {
         token,
         config.jwt__access_secret as string,
       );
+
       const user = await prisma.user.findUniqueOrThrow({
         where: {
           id: verifiedUser.id,
