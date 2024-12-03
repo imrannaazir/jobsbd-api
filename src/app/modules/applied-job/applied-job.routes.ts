@@ -14,5 +14,11 @@ router.post(
   AppliedJobControllers.applyJob,
 );
 
+router.get(
+  '/me',
+  auth(Role.CANDIDATE),
+  AppliedJobControllers.getAllMyAppliedJobs,
+);
+
 const AppliedJobRoutes = router;
 export default AppliedJobRoutes;
