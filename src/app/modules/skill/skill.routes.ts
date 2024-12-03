@@ -26,8 +26,8 @@ router.delete(
 router.patch(
   '/update/:skillId',
   auth(Role.CANDIDATE),
-  validateRequest(SkillValidationSchemas.updateSkillDurationValidationSchema),
-  SkillControllers.updateSkillDuration,
+  validateRequest(SkillValidationSchemas.updateSkillValidationSchema),
+  SkillControllers.updateSkill,
 );
 
 const SkillRoutes = router;

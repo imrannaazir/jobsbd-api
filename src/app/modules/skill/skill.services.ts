@@ -55,8 +55,8 @@ const deleteSkillById = async (skillId: string, userId: string) => {
   return deletedSkill;
 };
 
-const updateSkillDuration = async (
-  duration: number,
+const updateSkill = async (
+  payload: Partial<Skill>,
   skillId: string,
   userId: string,
 ): Promise<Skill> => {
@@ -72,7 +72,7 @@ const updateSkillDuration = async (
       candidateId: candidate?.id,
     },
     data: {
-      duration,
+      ...payload,
     },
   });
 
@@ -83,6 +83,6 @@ const SkillServices = {
   addSkill,
   getAllCandidateSkills,
   deleteSkillById,
-  updateSkillDuration,
+  updateSkill,
 };
 export default SkillServices;

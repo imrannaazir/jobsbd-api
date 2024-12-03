@@ -6,14 +6,15 @@ const addSkillValidationSchema = z.object({
     duration: z.number(),
   }),
 });
-const updateSkillDurationValidationSchema = z.object({
+const updateSkillValidationSchema = z.object({
   body: z.object({
-    duration: z.number(),
+    duration: z.number().optional(),
+    skill: z.string().optional(),
   }),
 });
 
 const SkillValidationSchemas = {
   addSkillValidationSchema,
-  updateSkillDurationValidationSchema,
+  updateSkillValidationSchema,
 };
 export default SkillValidationSchemas;
