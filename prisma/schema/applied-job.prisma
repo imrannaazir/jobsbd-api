@@ -1,0 +1,20 @@
+model AppliedJob {
+    id          String           @id @unique @default(uuid())
+    status      AppliedJobStatus @default(APPLIED)
+    candidateId String
+    companyId   String
+    jobId       String
+    candidate   Candidate        @relation(fields: [candidateId], references: [id])
+    job         Job              @relation(fields: [jobId], references: [id])
+    company     Company          @relation(fields: [companyId], references: [id])
+    resume      String
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+}
+
+enum AppliedJobStatus {
+    APPLIED
+    SHORTLISTED
+    REJECTED
+    ACCEPTED
+}

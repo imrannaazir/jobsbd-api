@@ -9,13 +9,24 @@ const createJob = async (
   payload: Job & Address & { skills: { skill: string; duration: number }[] },
   userId: string,
 ) => {
-  const result = await prisma.$transaction(async transactionClient => {
-    const company = await prisma.company.findFirstOrThrow({
-      where: {
-        userId,
-      },
-    });
+  const company = await prisma.company.findFirstOrThrow({
+    where: {
+      userId,
+    },
+  });
 
+  await prisma.industry.findFirstOrThrow({
+    where: {
+      id: payload.industryId,
+    },
+  });
+
+  await prisma.department.findFirstOrThrow({
+    where: {
+      id: payload.departmentId,
+    },
+  });
+  const result = await prisma.$transaction(async transactionClient => {
     const job = await transactionClient.job.create({
       data: {
         title: payload.title,

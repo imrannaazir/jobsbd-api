@@ -13,6 +13,8 @@ import handleZodError from '../../errors/handleZodError';
 import { TErrorDetails } from '../../interfaces/error';
 
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
+  console.log(error);
+
   let message = 'Something went wrong!';
   let statusCode: number = httpStatus.INTERNAL_SERVER_ERROR;
   let errorDetails: TErrorDetails = 'Something went wrong.';

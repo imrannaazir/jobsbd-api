@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import AppliedJobRoutes from '../modules/applied-job/applied-job.routes';
 import AuthRoutes from '../modules/auth/auth.routes';
 import CandidateRoutes from '../modules/candidate/candidate.routes';
 import CompanyRoutes from '../modules/company/company.routes';
@@ -71,6 +72,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/job',
     route: JobsRoutes,
+  },
+  {
+    path: '/applied-jobs',
+    route: AppliedJobRoutes,
   },
 ];
 

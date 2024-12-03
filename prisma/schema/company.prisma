@@ -12,6 +12,7 @@ model Company {
     companyDetails    String?
     job               Job[]
     address           Address?
+    appliedJobs       AppliedJob[]
     createdAt         DateTime  @default(now())
     updatedAt         DateTime  @updatedAt
 }

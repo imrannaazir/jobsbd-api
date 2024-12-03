@@ -18,6 +18,7 @@ model Candidate {
     languages       Language[]
     trainings       Training[]
     experiences     Experience[]
+    appliedJobs     AppliedJob[]
     createdAt       DateTime        @default(now())
     updatedAt       DateTime        @updatedAt
 }
