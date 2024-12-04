@@ -1,8 +1,8 @@
 import httpStatus from 'http-status';
-import config from '../../config';
-import ApiError from '../../errors/ApiError';
-import prisma from '../../shared/prisma';
-import { hashedPassword } from '../modules/auth/auth.utils';
+import { hashedPassword } from '../../src/app/modules/auth/auth.utils';
+import config from '../../src/config';
+import ApiError from '../../src/errors/ApiError';
+import prisma from '../../src/shared/prisma';
 
 export const seedSuperAdmin = async () => {
   const email = config.super_admin.email;

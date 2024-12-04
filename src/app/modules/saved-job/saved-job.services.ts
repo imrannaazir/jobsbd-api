@@ -65,6 +65,9 @@ const getAllMyJobs = async (
     orderBy: {
       [sortBy]: sortOrder,
     },
+    include: {
+      job: true,
+    },
   });
 
   return savedJobs;
