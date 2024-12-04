@@ -3,6 +3,7 @@ import AppliedJobRoutes from '../modules/applied-job/applied-job.routes';
 import AuthRoutes from '../modules/auth/auth.routes';
 import CandidateRoutes from '../modules/candidate/candidate.routes';
 import CompanyRoutes from '../modules/company/company.routes';
+import ContactRoutes from '../modules/contacts/contact.routes';
 import DepartmentRoutes from '../modules/department/department.routes';
 import EducationRoutes from '../modules/education/education.routes';
 import ExperienceRoutes from '../modules/experience/experience.routes';
@@ -76,6 +77,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/applied-jobs',
     route: AppliedJobRoutes,
+  },
+  {
+    path: '/contacts',
+    route: ContactRoutes,
   },
 ];
 
