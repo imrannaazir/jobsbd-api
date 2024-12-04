@@ -1,0 +1,10 @@
+model Resume {
+    id          String    @id @unique @default(uuid())
+    url         String
+    file_name   String
+    isDefault   Boolean
+    candidateId String
+    candidate   Candidate @relation(fields: [candidateId], references: [id])
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+}

@@ -11,6 +11,7 @@ import IndustryRoutes from '../modules/industry/industry.routes';
 import JobsRoutes from '../modules/jobs/jobs.routes';
 import LanguageRoutes from '../modules/language/language.routes';
 import ProjectRoutes from '../modules/project/project.routes';
+import ResumeRouter from '../modules/resume/resume.routes';
 import SavedJobRoutes from '../modules/saved-job/saved-job.routes';
 import SkillRoutes from '../modules/skill/skill.routes';
 import SocialRoutes from '../modules/social/social.routes';
@@ -83,6 +84,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/contacts',
     route: ContactRoutes,
+  },
+  {
+    path: '/resumes',
+    route: ResumeRouter,
   },
 ];
 

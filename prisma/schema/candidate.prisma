@@ -20,6 +20,7 @@ model Candidate {
     experiences     Experience[]
     appliedJobs     AppliedJob[]
     savedJobs       SavedJob[]
+    resumes         Resume[]
     createdAt       DateTime         @default(now())
     updatedAt       DateTime         @updatedAt
 }
