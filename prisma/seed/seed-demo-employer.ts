@@ -16,16 +16,29 @@ export const seedDemoEmployer = async () => {
       );
     }
 
-    await prisma.user.upsert({
-      where: { email, phoneNumber },
-      update: {},
-      create: {
-        email,
-        password,
-        phoneNumber,
-        role: 'EMPLOYER',
-        status: 'ACTIVE',
-      },
+    await prisma.$transaction(async tx => {
+      const user = await prisma.user.upsert({
+        where: { email, phoneNumber },
+        update: {},
+        create: {
+          email,
+          password,
+          phoneNumber,
+          role: 'EMPLOYER',
+          status: 'ACTIVE',
+        },
+      });
+
+      await tx.company.upsert({
+        where: {
+          userId: user.id,
+        },
+        update: {},
+        create: {
+          userId: user.id,
+          companyName: 'Demo Company',
+        },
+      });
     });
 
     console.log('Employer seeding completed');

@@ -1,11 +1,9 @@
 import { SavedJob } from '@prisma/client';
+import httpStatus from 'http-status';
 import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
 import prisma from '../../../shared/prisma';
 
-const toggleInSavedJob = async (
-  jobId: string,
-  userId: string,
-): Promise<SavedJob> => {
+const toggleInSavedJob = async (jobId: string, userId: string) => {
   const candidate = await prisma.candidate.findFirstOrThrow({
     where: {
       userId,
@@ -41,7 +39,10 @@ const toggleInSavedJob = async (
     });
   }
 
-  return newSavedJob;
+  return {
+    data: newSavedJob,
+    statusCode: isAlreadySaved ? httpStatus.ok : (httpStatus.CREATED as number),
+  };
 };
 
 const getAllMyJobs = async (

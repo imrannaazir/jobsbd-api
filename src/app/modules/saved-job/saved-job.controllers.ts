@@ -12,9 +12,9 @@ const toggleInSavedJob = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     success: true,
-    statusCode: httpStatus.CREATED,
+    statusCode: result.statusCode as number,
     message: 'Job saved toggle successfully.',
-    data: result,
+    data: result.data,
   });
 });
 

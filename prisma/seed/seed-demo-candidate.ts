@@ -16,18 +16,30 @@ export const seedDemoCandidate = async () => {
       );
     }
 
-    await prisma.user.upsert({
-      where: { email, phoneNumber },
-      update: {},
-      create: {
-        email,
-        password,
-        phoneNumber,
-        role: 'CANDIDATE',
-        status: 'ACTIVE',
-      },
-    });
+    await prisma.$transaction(async tx => {
+      const user = await tx.user.upsert({
+        where: { email, phoneNumber },
+        update: {},
+        create: {
+          email,
+          password,
+          phoneNumber,
+          role: 'CANDIDATE',
+          status: 'ACTIVE',
+        },
+      });
 
+      await tx.candidate.upsert({
+        where: {
+          userId: user.id,
+        },
+        update: {},
+        create: {
+          userId: user.id,
+          fullName: 'Demo Candidate',
+        },
+      });
+    });
     console.log('Candidate seeding completed');
   } catch (error) {
     console.error('Error seeding candidate:', error);
