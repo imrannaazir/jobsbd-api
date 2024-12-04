@@ -41,7 +41,7 @@ const toggleInSavedJob = async (jobId: string, userId: string) => {
 
   return {
     data: newSavedJob,
-    statusCode: isAlreadySaved ? httpStatus.ok : (httpStatus.CREATED as number),
+    statusCode: isAlreadySaved ? httpStatus.OK : (httpStatus.CREATED as number),
   };
 };
 
