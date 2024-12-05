@@ -99,5 +99,30 @@ const getAllMyResumes = async (
 
   return resumes;
 };
-const ResumeServices = { addNewResume, markAsDefault, getAllMyResumes };
+
+const deleteResume = async (
+  resumeId: string,
+  userId: string,
+): Promise<Resume> => {
+  const candidate = await prisma.candidate.findFirstOrThrow({
+    where: {
+      userId,
+    },
+  });
+
+  const deletedResume = await prisma.resume.delete({
+    where: {
+      id: resumeId,
+      candidateId: candidate.id,
+    },
+  });
+
+  return deletedResume;
+};
+const ResumeServices = {
+  addNewResume,
+  markAsDefault,
+  getAllMyResumes,
+  deleteResume,
+};
 export default ResumeServices;

@@ -20,6 +20,12 @@ router.patch(
   ResumeControllers.markAsDefault,
 );
 
+router.delete(
+  '/delete/:resumeId',
+  auth(Role.CANDIDATE),
+  ResumeControllers.deleteResume,
+);
+
 router.get('/me/all', auth(Role.CANDIDATE), ResumeControllers.getAllMyResumes);
 
 const ResumeRouter = router;

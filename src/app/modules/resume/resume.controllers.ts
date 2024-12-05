@@ -39,5 +39,22 @@ const getAllMyResumes = catchAsync(async (req, res) => {
   });
 });
 
-const ResumeControllers = { addNewResume, markAsDefault, getAllMyResumes };
+const deleteResume = catchAsync(async (req, res) => {
+  const userId = req.user?.id;
+  const resumeId = req.params.resumeId;
+  const result = await ResumeServices.deleteResume(resumeId, userId!);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Your resume deleted successfully.',
+    data: result,
+  });
+});
+
+const ResumeControllers = {
+  addNewResume,
+  markAsDefault,
+  getAllMyResumes,
+  deleteResume,
+};
 export default ResumeControllers;
