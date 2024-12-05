@@ -19,9 +19,15 @@ const applyJob = async (
     },
   });
 
+  const resume = await prisma.resume.findFirstOrThrow({
+    where: {
+      candidateId: candidate.id,
+      isDefault: true,
+    },
+  });
   const appliedJob = await prisma.appliedJob.create({
     data: {
-      resume: payload.resume,
+      resumeId: resume.id,
       candidateId: candidate.id,
       jobId: payload.jobId,
       companyId: job.companyId,
