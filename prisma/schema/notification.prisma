@@ -1,0 +1,21 @@
+model Notification {
+    id          String           @id @unique @default(uuid())
+    title       String
+    message     String
+    type        NotificationType
+    isRead      Boolean
+    redirectUrl String
+    senderId    String
+    receiverId  String
+    sender      User             @relation("senderToNotification", fields: [senderId], references: [id])
+    receiver    User             @relation("receiverToNotification", fields: [receiverId], references: [id])
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+}
+
+enum NotificationType {
+    APPLIED
+    SORT_LISTED
+    ACCEPTED
+    REJECTED
+}
