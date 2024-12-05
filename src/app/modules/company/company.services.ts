@@ -1,6 +1,7 @@
-import { Company } from '@prisma/client';
+import { Company, Prisma } from '@prisma/client';
+import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
 import prisma from '../../../shared/prisma';
-import { TCompanyInput } from './company.types';
+import { TCompanyFilters, TCompanyInput } from './company.types';
 
 const updateCompany = async (
   payload: TCompanyInput,
@@ -62,5 +63,52 @@ const getMyCompany = async (userId: string): Promise<Company> => {
   return company;
 };
 
-const CompanyServices = { updateCompany, getMyCompany };
+const getAllCompanies = async (
+  filters: TCompanyFilters,
+  options: IOptions,
+): Promise<Company[]> => {
+  const whereOptions: Prisma.CompanyWhereInput = {};
+  if (filters.companyName) {
+    whereOptions.companyName = {
+      contains: String(filters.companyName),
+      mode: 'insensitive',
+    };
+  }
+
+  if (filters.address) {
+    whereOptions.address = {
+      OR: [
+        {
+          district: {
+            contains: String(filters.address),
+            mode: 'insensitive',
+          },
+        },
+        {
+          addressLine: {
+            contains: String(filters.address),
+            mode: 'insensitive',
+          },
+        },
+      ],
+    };
+  }
+
+  const { limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(options);
+  const companies = await prisma.company.findMany({
+    where: whereOptions,
+    skip,
+    take: limit,
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
+    include: {
+      address: true,
+    },
+  });
+
+  return companies;
+};
+const CompanyServices = { updateCompany, getMyCompany, getAllCompanies };
 export default CompanyServices;

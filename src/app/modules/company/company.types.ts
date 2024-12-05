@@ -11,3 +11,8 @@ export type TCompanyInput = Omit<
   | 'experienceId'
   | 'jobId'
 >;
+
+export type TCompanyFilters = {
+  companyName: string;
+  address: string;
+};

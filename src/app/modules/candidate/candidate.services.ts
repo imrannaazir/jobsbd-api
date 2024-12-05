@@ -72,5 +72,8 @@ const getMyCandidateData = async (userId: string) => {
   return candidate;
 };
 
-const CandidateServices = { updateCandidate, getMyCandidateData };
+const CandidateServices = {
+  updateCandidate,
+  getMyCandidateData,
+};
 export default CandidateServices;

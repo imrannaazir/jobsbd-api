@@ -15,6 +15,6 @@ router.put(
 );
 
 router.get('/me', auth(Role.EMPLOYER), CompanyControllers.getMyCompany);
-
+router.get('/all', CompanyControllers.getAllCompanies);
 const CompanyRoutes = router;
 export default CompanyRoutes;
