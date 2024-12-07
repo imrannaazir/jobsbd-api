@@ -1,28 +1,29 @@
 model Candidate {
-    id              String           @id @unique @default(uuid())
-    user            User             @relation(fields: [userId], references: [id])
-    userId          String           @unique
-    fullName        String
-    totalExperience Int?             @default(0)
-    currentSalary   Int?             @default(0)
-    expectedSalary  Int?             @default(0)
-    employmentType  EMPLOYMENT_TYPE?
-    jobLevel        JOB_LEVEL?
-    bio             String?
-    address         Address?
-    resume          String?
-    skills          Skill[]
-    educations      Education[]
-    projects        Project[]
-    socials         Social[]
-    languages       Language[]
-    trainings       Training[]
-    experiences     Experience[]
-    appliedJobs     AppliedJob[]
-    savedJobs       SavedJob[]
-    resumes         Resume[]
-    createdAt       DateTime         @default(now())
-    updatedAt       DateTime         @updatedAt
+    id                String            @id @unique @default(uuid())
+    user              User              @relation(fields: [userId], references: [id])
+    userId            String            @unique
+    fullName          String
+    totalExperience   Int?              @default(0)
+    currentSalary     Int?              @default(0)
+    expectedSalary    Int?              @default(0)
+    employmentType    EMPLOYMENT_TYPE?
+    jobLevel          JOB_LEVEL?
+    bio               String?
+    address           Address?
+    resume            String?
+    skills            Skill[]
+    educations        Education[]
+    projects          Project[]
+    socials           Social[]
+    languages         Language[]
+    trainings         Training[]
+    experiences       Experience[]
+    appliedJobs       AppliedJob[]
+    savedJobs         SavedJob[]
+    resumes           Resume[]
+    followedCompanies FollowedCompany[]
+    createdAt         DateTime          @default(now())
+    updatedAt         DateTime          @updatedAt
 }
 
 enum EMPLOYMENT_TYPE {

@@ -5,6 +5,8 @@ import ApiError from '../../src/errors/ApiError';
 import prisma from '../../src/shared/prisma';
 
 export const seedSuperAdmin = async () => {
+  console.log('Start super admin seeding...');
+
   const email = config.super_admin.email;
   const password = await hashedPassword(config.super_admin.password!);
   const phoneNumber = config.super_admin.phone_number;

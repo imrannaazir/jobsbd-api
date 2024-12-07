@@ -79,6 +79,9 @@ const getAllMyAppliedJobs = async (
     },
     skip,
     take: limit,
+    include: {
+      job: true,
+    },
     orderBy: {
       [sortBy]: sortOrder,
     },
