@@ -1,3 +1,5 @@
+import httpStatus from 'http-status';
+import ApiError from '../../../errors/ApiError';
 import prisma from '../../../shared/prisma';
 import { TLanguage, TUpdateLanguage } from './language.types';
 
@@ -39,6 +41,14 @@ const createCandidateLanguageInDB = async (
 
   if (!candidate) {
     throw new Error('Candidate not found');
+  }
+  const language = await prisma.language.findUnique({
+    where: {
+      language: payload.language,
+    },
+  });
+  if (language) {
+    throw new ApiError(httpStatus.CREATED, 'Language already exists');
   }
 
   const newLanguage = await prisma.language.create({
