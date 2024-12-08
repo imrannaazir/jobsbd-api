@@ -35,6 +35,8 @@ const industries = [
 ];
 
 export async function seedIndustries() {
+  console.log('Start industry seeding...');
+
   for (const industry of industries) {
     await prisma.industry.upsert({
       where: { name: industry.name },

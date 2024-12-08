@@ -24,6 +24,8 @@ const departments = [
 ];
 
 export async function seedDepartments() {
+  console.log('Start department seeding...');
+
   for (const department of departments) {
     await prisma.department.upsert({
       where: { name: department.name },

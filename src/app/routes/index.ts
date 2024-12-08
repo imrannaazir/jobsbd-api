@@ -7,6 +7,7 @@ import ContactRoutes from '../modules/contacts/contact.routes';
 import DepartmentRoutes from '../modules/department/department.routes';
 import EducationRoutes from '../modules/education/education.routes';
 import ExperienceRoutes from '../modules/experience/experience.routes';
+import FollowedCompanyRoutes from '../modules/followed-company/followed-company-routes';
 import IndustryRoutes from '../modules/industry/industry.routes';
 import JobsRoutes from '../modules/jobs/jobs.routes';
 import LanguageRoutes from '../modules/language/language.routes';
@@ -88,6 +89,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/resumes',
     route: ResumeRouter,
+  },
+  {
+    path: '/followed-companies',
+    route: FollowedCompanyRoutes,
   },
 ];
 

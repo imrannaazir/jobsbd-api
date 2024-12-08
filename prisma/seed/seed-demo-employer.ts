@@ -5,6 +5,8 @@ import ApiError from '../../src/errors/ApiError';
 import prisma from '../../src/shared/prisma';
 
 export const seedDemoEmployer = async () => {
+  console.log('Start employer seeding...');
+
   const email = 'employer@gmail.com';
   const password = await hashedPassword(config.super_admin.password!);
   const phoneNumber = '+8801402490507';
