@@ -53,7 +53,7 @@ const applyJob = async (
 
     if (notification.id) {
       const io = getIo();
-      io.to(job?.company.userId).emit('newNotification', notification);
+      io.to(notification.receiverId).emit('newNotification', notification);
     }
     return appliedJob;
   });

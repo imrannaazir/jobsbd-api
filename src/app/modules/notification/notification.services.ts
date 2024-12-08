@@ -1,26 +1,16 @@
+import { Prisma } from '@prisma/client';
 import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
 import prisma from '../../../shared/prisma';
 import { getIo } from '../../../socket';
 
-const sendNotification = async (userId: string) => {
-  const company = await prisma.company.findFirstOrThrow({
-    where: {},
-  });
+const sendNotification = async (payload: Prisma.NotificationCreateInput) => {
   const notification = await prisma.notification.create({
-    data: {
-      isRead: false,
-      message: ` Candidate applied to your posted job. ${Date.now().toString()}`,
-      redirectUrl: `/recruiter-dashboard`,
-      title: 'Job applied',
-      type: 'APPLIED',
-      receiverId: company?.userId,
-      senderId: userId,
-    },
+    data: payload,
   });
 
   if (notification.id) {
     const io = getIo();
-    io.to(company.userId).emit('newNotification', notification);
+    io.to(notification.receiverId).emit('newNotification', notification);
   }
 };
 
