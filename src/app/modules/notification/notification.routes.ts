@@ -17,5 +17,10 @@ router.get(
   NotificationControllers.getAllMyNotifications,
 );
 
+router.patch(
+  '/mark-as-read',
+  auth(),
+  NotificationControllers.markAllNotificationRead,
+);
 const NotificationRoutes = router;
 export default NotificationRoutes;

@@ -44,8 +44,22 @@ const getAllMyNotifications = async (userId: string, options: IOptions) => {
   return notifications;
 };
 
+const markAllNotificationRead = async (userId: string) => {
+  const updatedNotifications = await prisma.notification.updateMany({
+    where: {
+      receiverId: userId,
+      isRead: false,
+    },
+    data: {
+      isRead: true,
+    },
+  });
+  return updatedNotifications;
+};
+
 const NotificationServices = {
   sendNotification,
   getAllMyNotifications,
+  markAllNotificationRead,
 };
 export default NotificationServices;
