@@ -13,6 +13,7 @@ export const initializeSocket = (server: HttpServer) => {
       credentials: true,
     },
   });
+  console.log('from here');
 
   io.on('connection', socket => {
     console.log('Client connected', socket.id);

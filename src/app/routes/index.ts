@@ -10,6 +10,7 @@ import ExperienceRoutes from '../modules/experience/experience.routes';
 import IndustryRoutes from '../modules/industry/industry.routes';
 import JobsRoutes from '../modules/jobs/jobs.routes';
 import LanguageRoutes from '../modules/language/language.routes';
+import NotificationRoutes from '../modules/notification/notification.routes';
 import ProjectRoutes from '../modules/project/project.routes';
 import ResumeRouter from '../modules/resume/resume.routes';
 import SavedJobRoutes from '../modules/saved-job/saved-job.routes';
@@ -88,6 +89,10 @@ const moduleRoutes: TRouteModule[] = [
   {
     path: '/resumes',
     route: ResumeRouter,
+  },
+  {
+    path: '/notifications',
+    route: NotificationRoutes,
   },
 ];
 
