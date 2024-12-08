@@ -1,6 +1,8 @@
 import { Address, Job, Prisma } from '@prisma/client';
 import httpStatus from 'http-status';
+import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
+import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
 import prisma from '../../../shared/prisma';
 import { TJobFilters } from './job.types';
@@ -119,7 +121,11 @@ const getSingleJob = async (jobId: string) => {
   return result;
 };
 
-const getAllJobs = async (filters: TJobFilters, options: IOptions) => {
+const getAllJobs = async (
+  filters: TJobFilters,
+  options: IOptions,
+  token: string | null,
+) => {
   const query = filters.query;
   const location = filters.location;
   const industry = filters.industry;
@@ -206,6 +212,33 @@ const getAllJobs = async (filters: TJobFilters, options: IOptions) => {
     };
   }
 
+  if (token) {
+    const decodedToken = jwtHelpers.verifyToken(
+      token,
+      config.jwt__access_secret!,
+    );
+    if (decodedToken) {
+      const candidate = await prisma.candidate.findFirst({
+        where: {
+          userId: decodedToken.id,
+        },
+      });
+      if (candidate) {
+        const appliedJobs = await prisma.appliedJob.findMany({
+          where: {
+            candidateId: candidate.id,
+          },
+        });
+        const appliedJobIds = appliedJobs?.map(item => item.jobId);
+        if (appliedJobIds?.length > 0) {
+          whereOptions.id = {
+            notIn: appliedJobIds,
+          };
+        }
+      }
+    }
+  }
+
   const jobs = await prisma.job.findMany({
     where: whereOptions,
     skip,
@@ -214,6 +247,18 @@ const getAllJobs = async (filters: TJobFilters, options: IOptions) => {
       [sortBy]: sortOrder,
     },
     include: {
+      company: {
+        select: {
+          companyName: true,
+          id: true,
+          image: true,
+        },
+      },
+      address: {
+        select: {
+          district: true,
+        },
+      },
       department: true,
       industry: true,
     },

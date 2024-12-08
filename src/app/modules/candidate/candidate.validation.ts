@@ -5,6 +5,8 @@ const updateCandidateValidationSchema = z.object({
   body: z.object({
     addressLine: z.string().optional(),
     bio: z.string().optional(),
+    image: z.string().optional(),
+    designation: z.string().optional(),
     currentSalary: z.number().optional(),
     expectedSalary: z.number().optional(),
     district: z.string().optional(),
