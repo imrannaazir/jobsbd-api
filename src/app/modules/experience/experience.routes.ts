@@ -14,19 +14,23 @@ router.post(
   ExperienceControllers.createExperience,
 );
 
-router.get('/', auth(Role.CANDIDATE), ExperienceControllers.getAllExperiences);
+router.get(
+  '/all/',
+  auth(Role.CANDIDATE),
+  ExperienceControllers.getAllExperiences,
+);
 
 router.get('/:id', auth(Role.CANDIDATE), ExperienceControllers.getExperience);
 
 router.patch(
-  '/:id',
+  '/update-experience/:id',
   auth(Role.CANDIDATE),
   validateRequest(ExperienceValidation.updateExperienceValidationSchema),
   ExperienceControllers.updateExperience,
 );
 
 router.delete(
-  '/:id',
+  '/delete-experience/:id',
   auth(Role.CANDIDATE),
   ExperienceControllers.deleteExperience,
 );

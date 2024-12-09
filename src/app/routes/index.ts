@@ -61,7 +61,7 @@ const moduleRoutes: TRouteModule[] = [
     route: SocialRoutes,
   },
   {
-    path: '/experience',
+    path: '/experiences',
     route: ExperienceRoutes,
   },
   {
