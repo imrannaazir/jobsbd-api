@@ -41,9 +41,11 @@ const getSingleJob = catchAsync(async (req: Request & { user?: any }, res) => {
 });
 
 const getAllJobs = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+
   const options = pick(req.query, OptionsFields) as IOptions;
   const filters = pick(req.query, JobFilterableFields) as TJobFilters;
-  const result = await JobsServices.getAllJobs(filters, options);
+  const result = await JobsServices.getAllJobs(filters, options, token!);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     message: 'Jobs retrieved successfully',

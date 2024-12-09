@@ -1,7 +1,8 @@
-import { AppliedJob } from '@prisma/client';
+import { AppliedJob, NotificationType } from '@prisma/client';
 import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
 import prisma from '../../../shared/prisma';
-import { getIo } from '../../../socket';
+import NotificationServices from '../notification/notification.services';
+import { TNotificationPayload } from '../notification/notification.types';
 import { TAppliedJobInput } from './applied-job.types';
 
 const applyJob = async (
@@ -29,36 +30,29 @@ const applyJob = async (
       isDefault: true,
     },
   });
-  const result = prisma.$transaction(async tx => {
-    const appliedJob = await tx.appliedJob.create({
-      data: {
-        resumeId: resume.id,
-        candidateId: candidate.id,
-        jobId: payload.jobId,
-        companyId: job.companyId,
-      },
-    });
-
-    const notification = await tx.notification.create({
-      data: {
-        isRead: false,
-        message: `${candidate.fullName} applied to your posted job.`,
-        redirectUrl: `/recruiter-dashboard`,
-        title: 'Job applied',
-        type: 'APPLIED',
-        receiverId: job?.company?.userId,
-        senderId: candidate.userId,
-      },
-    });
-
-    if (notification.id) {
-      const io = getIo();
-      io.to(notification.receiverId).emit('newNotification', notification);
-    }
-    return appliedJob;
+  const appliedJob = await prisma.appliedJob.create({
+    data: {
+      resumeId: resume.id,
+      candidateId: candidate.id,
+      jobId: payload.jobId,
+      companyId: job.companyId,
+    },
   });
 
-  return result;
+  const notificationPayload: TNotificationPayload = {
+    title: 'New Job Application Received',
+    message: `You have received a new application for the job post: ${job.title}. Check the candidate's profile now.`,
+    type: NotificationType.APPLIED,
+    redirectUrl: `/recruiter/dashboard`,
+    receiverId: job?.company?.userId,
+    senderId: candidate?.userId,
+  };
+
+  if (appliedJob.id) {
+    await NotificationServices.sendNotification(notificationPayload);
+  }
+
+  return appliedJob;
 };
 
 const getAllMyAppliedJobs = async (

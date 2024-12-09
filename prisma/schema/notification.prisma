@@ -3,7 +3,7 @@ model Notification {
     title       String
     message     String
     type        NotificationType
-    isRead      Boolean
+    isRead      Boolean          @default(false)
     redirectUrl String
     senderId    String
     receiverId  String
@@ -15,7 +15,19 @@ model Notification {
 
 enum NotificationType {
     APPLIED
+    FOLLOWED
+
     SORT_LISTED
     ACCEPTED
     REJECTED
+    SAVED_PROFILE
+    SAVED_JOB
 }
+
+//  APPLIED : when a candidate will apply to a job , the posted employer get notification
+// FOLLOWED: when a candidate follows a employers ,employer will get a notification
+// SAVED_JOB: when a candidate saves a employer's posted job , the employer will get a notification
+// SORT_LISTED: when employer sort list a applied candidate the candidate will get notification
+// ACCEPTED : when employer accept a applied job of a candidate , candidate will get a notification
+// REJECTED : when employer reject a applied job of candidate , candidate will get a notification
+//SAVED_PROFILE: when a employer saved a candidate profile , the candidate will get a notification

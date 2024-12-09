@@ -1,9 +1,9 @@
-import { Prisma } from '@prisma/client';
 import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
 import prisma from '../../../shared/prisma';
 import { getIo } from '../../../socket';
+import { TNotificationPayload } from './notification.types';
 
-const sendNotification = async (payload: Prisma.NotificationCreateInput) => {
+const sendNotification = async (payload: TNotificationPayload) => {
   const notification = await prisma.notification.create({
     data: payload,
   });
