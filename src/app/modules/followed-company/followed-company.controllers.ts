@@ -6,15 +6,13 @@ import FollowedCompanyServices from './followed-company.services';
 const followCompany = catchAsync(async (req, res) => {
   const userId = req.user?.id;
   const { companyId } = req.body;
-  const result = await FollowedCompanyServices.followCompany(
-    companyId,
-    userId!,
-  );
+  const { data, message, statusCode } =
+    await FollowedCompanyServices.followCompany(companyId, userId!);
   sendResponse(res, {
     success: true,
-    statusCode: httpStatus.CREATED,
-    message: 'Company followed successfully.',
-    data: result,
+    statusCode,
+    message,
+    data,
   });
 });
 const getAllFollowedCompany = catchAsync(async (req, res) => {
