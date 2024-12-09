@@ -27,6 +27,20 @@ const getMyCandidateData = catchAsync(async (req, res) => {
     data: result,
   });
 });
-const CandidateControllers = { updateCandidate, getMyCandidateData };
+const getCandidateById = catchAsync(async (req, res) => {
+  const candidateId = req.params?.candidateId;
+  const result = await CandidateServices.getCandidateById(candidateId);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Candidate data retrieved successfully.',
+    data: result,
+  });
+});
+const CandidateControllers = {
+  updateCandidate,
+  getMyCandidateData,
+  getCandidateById,
+};
 
 export default CandidateControllers;

@@ -105,10 +105,22 @@ const getAllCompanies = async (
     },
     include: {
       address: true,
+      job: {
+        select: {
+          id: true,
+        },
+      },
     },
   });
+  const transformedData = companies?.map(company => {
+    const { job, ...rest } = company;
+    return {
+      postedJobsCount: job?.length,
+      ...rest,
+    };
+  });
 
-  return companies;
+  return transformedData;
 };
 const CompanyServices = { updateCompany, getMyCompany, getAllCompanies };
 export default CompanyServices;

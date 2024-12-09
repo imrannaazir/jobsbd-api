@@ -53,10 +53,22 @@ const getAllJobs = catchAsync(async (req, res) => {
     success: true,
   });
 });
+
+const getAllMyPostedJobs = catchAsync(async (req, res) => {
+  const userId = req.user?.id;
+  const result = await JobsServices.getAllMyPostedJobs(userId!);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Your posted jobs retrieved successfully',
+    data: result,
+    success: true,
+  });
+});
 const JobControllers = {
   createJob,
   deleteJob,
   getSingleJob,
   getAllJobs,
+  getAllMyPostedJobs,
 };
 export default JobControllers;
