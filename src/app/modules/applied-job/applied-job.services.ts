@@ -1,4 +1,4 @@
-import { AppliedJob } from '@prisma/client';
+import { AppliedJob, AppliedJobStatus } from '@prisma/client';
 import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
 import prisma from '../../../shared/prisma';
 import { TAppliedJobInput } from './applied-job.types';
@@ -66,5 +66,66 @@ const getAllMyAppliedJobs = async (
   return appliedJobs;
 };
 
-const AppliedJobServices = { applyJob, getAllMyAppliedJobs };
+const getAllApplicantsOfJob = async (jobId: string, userId: string) => {
+  const company = await prisma.candidate.findFirstOrThrow({
+    where: {
+      userId,
+    },
+  });
+
+  await prisma.job.findFirstOrThrow({
+    where: {
+      companyId: company.id,
+      id: jobId,
+    },
+  });
+
+  const appliedJobs = await prisma.appliedJob.findMany({
+    where: {
+      companyId: company.id,
+      jobId,
+    },
+    include: {
+      candidate: true,
+    },
+  });
+  return appliedJobs;
+};
+
+const updateApplyStatus = async (
+  appliedJobId: string,
+  status: AppliedJobStatus,
+  userId: string,
+) => {
+  const company = await prisma.company.findFirstOrThrow({
+    where: {
+      userId,
+    },
+  });
+
+  const appliedJob = await prisma.appliedJob.findFirstOrThrow({
+    where: {
+      id: appliedJobId,
+      companyId: company.id,
+    },
+  });
+
+  const updateAppliedJob = await prisma.appliedJob.update({
+    where: {
+      id: appliedJob.id,
+    },
+    data: {
+      status,
+    },
+  });
+
+  return updateAppliedJob;
+};
+
+const AppliedJobServices = {
+  applyJob,
+  getAllMyAppliedJobs,
+  getAllApplicantsOfJob,
+  updateApplyStatus,
+};
 export default AppliedJobServices;
