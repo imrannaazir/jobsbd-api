@@ -1,6 +1,6 @@
 model Language {
     id          String      @id @unique @default(uuid())
-    language    String
+    language    String      @unique
     proficiency PROFICIENCY
     candidateId String
     candidate   Candidate   @relation(fields: [candidateId], references: [id])

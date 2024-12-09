@@ -234,7 +234,6 @@ const changePassword = async (user: any, payload: IChangePassword) => {
       email: user.email,
     },
   });
-
   const isCorrectPassword = await bcrypt.compare(
     payload.oldPassword,
     userData.password,
@@ -257,8 +256,30 @@ const changePassword = async (user: any, payload: IChangePassword) => {
     },
   });
 
+  const accessToken = jwtHelpers.generateToken(
+    {
+      id: userData.id,
+      email: userData.email,
+      role: userData.role,
+    },
+    config.jwt__access_secret as string,
+    config.jwt__access_expire_in as string,
+  );
+  const refreshToken = jwtHelpers.generateToken(
+    {
+      id: userData.id,
+      email: userData.email,
+      role: userData.role,
+    },
+    config.jwt__refresh_secret as string,
+    config.jwt__refresh_expire_in as string,
+  );
   return {
-    message: 'Password changed successfully',
+    id: userData.id,
+    email: userData.email,
+    phoneNumber: userData?.phoneNumber,
+    accessToken,
+    refreshToken,
   };
 };
 

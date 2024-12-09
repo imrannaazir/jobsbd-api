@@ -20,7 +20,7 @@ router.post(
   LanguageController.createCandidateLanguage,
 );
 
-router.put(
+router.patch(
   '/update-language/:languageId',
   auth(Role.CANDIDATE),
   validateRequest(LanguageValidations.languageUpdateValidationSchema),
@@ -28,7 +28,7 @@ router.put(
 );
 
 router.delete(
-  '/delete-langauge/:languageId',
+  '/delete-language/:languageId',
   auth(Role.CANDIDATE),
   LanguageController.deleteCandidateLanguage,
 );
