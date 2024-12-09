@@ -5,16 +5,6 @@ import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
 import NotificationServices from './notification.services';
 
-const sendNotification = catchAsync(async (req, res) => {
-  const userId = req.user?.id;
-  const result = await NotificationServices.sendNotification(userId!);
-  sendResponse(res, {
-    success: true,
-    message: 'Notification sent successfully.',
-    statusCode: httpStatus.OK,
-    data: result,
-  });
-});
 const getAllMyNotifications = catchAsync(async (req, res) => {
   const userId = req.user?.id;
   const options = pick(req.query, OptionsFields);
@@ -41,9 +31,23 @@ const markAllNotificationRead = catchAsync(async (req, res) => {
   });
 });
 
+const deleteNotificationById = catchAsync(async (req, res) => {
+  const userId = req.user?.id;
+  const notificationId = req.params.notificationId;
+  const result = await NotificationServices.deleteNotificationById(
+    userId!,
+    notificationId,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Notifications deleted successfully.',
+    statusCode: httpStatus.OK,
+    data: result,
+  });
+});
 const NotificationControllers = {
-  sendNotification,
   getAllMyNotifications,
   markAllNotificationRead,
+  deleteNotificationById,
 };
 export default NotificationControllers;

@@ -47,9 +47,24 @@ const markAllNotificationRead = async (userId: string) => {
   return updatedNotifications;
 };
 
+const deleteNotificationById = async (
+  userId: string,
+  notificationId: string,
+) => {
+  const deletedNotification = await prisma.notification.delete({
+    where: {
+      id: notificationId,
+      receiverId: userId,
+    },
+  });
+
+  return deletedNotification;
+};
+
 const NotificationServices = {
   sendNotification,
   getAllMyNotifications,
   markAllNotificationRead,
+  deleteNotificationById,
 };
 export default NotificationServices;

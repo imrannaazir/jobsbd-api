@@ -16,12 +16,12 @@ model Notification {
 enum NotificationType {
     APPLIED
     FOLLOWED
+    SAVED_JOB
 
     SORT_LISTED
     ACCEPTED
     REJECTED
     SAVED_PROFILE
-    SAVED_JOB
 }
 
 //  APPLIED : when a candidate will apply to a job , the posted employer get notification
