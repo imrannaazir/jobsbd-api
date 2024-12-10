@@ -72,7 +72,7 @@ const getAllMyAppliedJobs = async (
 };
 
 const getAllApplicantsOfJob = async (jobId: string, userId: string) => {
-  const company = await prisma.candidate.findFirstOrThrow({
+  const company = await prisma.company.findFirstOrThrow({
     where: {
       userId,
     },
@@ -91,7 +91,21 @@ const getAllApplicantsOfJob = async (jobId: string, userId: string) => {
       jobId,
     },
     include: {
-      candidate: true,
+      candidate: {
+        include: {
+          educations: {
+            select: {
+              instituteName: true,
+            },
+          },
+          skills: true,
+          user: {
+            select: {
+              phoneNumber: true,
+            },
+          },
+        },
+      },
     },
   });
   return appliedJobs;
