@@ -1,5 +1,8 @@
+import { NotificationType } from '@prisma/client';
 import httpStatus from 'http-status';
 import prisma from '../../../shared/prisma';
+import NotificationServices from '../notification/notification.services';
+import { TNotificationPayload } from '../notification/notification.types';
 
 const followCompany = async (companyId: string, userId: string) => {
   const company = await prisma.company.findFirstOrThrow({
@@ -20,6 +23,15 @@ const followCompany = async (companyId: string, userId: string) => {
     },
   });
 
+  const notificationPayload: TNotificationPayload = {
+    title: "You've Gained a New Follower",
+    message: `${candidate?.fullName} is now following your profile. Explore their profile to learn more about them.`,
+    type: NotificationType.FOLLOWED,
+    redirectUrl: `/`,
+    receiverId: company?.userId,
+    senderId: candidate?.userId,
+  };
+
   let followedCompany;
   if (!isAlreadyFollowed) {
     followedCompany = await prisma.followedCompany.create({
@@ -36,6 +48,9 @@ const followCompany = async (companyId: string, userId: string) => {
         companyId: company.id,
       },
     });
+  }
+  if (followedCompany?.id) {
+    await NotificationServices.sendNotification(notificationPayload);
   }
   return {
     data: followedCompany,

@@ -1,7 +1,9 @@
-import { SavedJob } from '@prisma/client';
+import { NotificationType, SavedJob } from '@prisma/client';
 import httpStatus from 'http-status';
 import { IOptions, paginationHelpers } from '../../../helpers/paginationHelper';
 import prisma from '../../../shared/prisma';
+import NotificationServices from '../notification/notification.services';
+import { TNotificationPayload } from '../notification/notification.types';
 
 const toggleInSavedJob = async (jobId: string, userId: string) => {
   const candidate = await prisma.candidate.findFirstOrThrow({
@@ -10,9 +12,12 @@ const toggleInSavedJob = async (jobId: string, userId: string) => {
     },
   });
 
-  await prisma.job.findFirstOrThrow({
+  const job = await prisma.job.findFirstOrThrow({
     where: {
       id: jobId,
+    },
+    include: {
+      company: true,
     },
   });
 
@@ -31,6 +36,17 @@ const toggleInSavedJob = async (jobId: string, userId: string) => {
         jobId,
       },
     });
+    const notificationPayload: TNotificationPayload = {
+      title: 'Your Job Post Has Been Saved',
+      message: `${candidate?.fullName} has saved your job post: ${job?.title}. They might apply soon!`,
+      type: NotificationType.SAVED_JOB,
+      redirectUrl: `/recruiter/dashboard`,
+      receiverId: job?.company?.userId,
+      senderId: candidate?.userId,
+    };
+    if (newSavedJob?.id) {
+      await NotificationServices.sendNotification(notificationPayload);
+    }
   } else {
     newSavedJob = await prisma.savedJob.delete({
       where: {

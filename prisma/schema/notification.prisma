@@ -1,0 +1,34 @@
+model Notification {
+    id          String           @id @unique @default(uuid())
+    title       String
+    message     String
+    type        NotificationType
+    isRead      Boolean          @default(false)
+    redirectUrl String
+    senderId    String
+    receiverId  String
+    sender      User             @relation("senderToNotification", fields: [senderId], references: [id])
+    receiver    User             @relation("receiverToNotification", fields: [receiverId], references: [id])
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+}
+
+enum NotificationType {
+    APPLIED
+    FOLLOWED
+    SAVED_JOB
+
+    SHORT_LISTED
+    HIRED
+    ACCEPTED
+    REJECTED
+    SAVED_PROFILE
+}
+
+//  APPLIED : when a candidate will apply to a job , the posted employer get notification
+// FOLLOWED: when a candidate follows a employers ,employer will get a notification
+// SAVED_JOB: when a candidate saves a employer's posted job , the employer will get a notification
+// SHORT_LISTED: when employer sort list a applied candidate the candidate will get notification
+// ACCEPTED : when employer accept a applied job of a candidate , candidate will get a notification
+// REJECTED : when employer reject a applied job of candidate , candidate will get a notification
+//SAVED_PROFILE: when a employer saved a candidate profile , the candidate will get a notification

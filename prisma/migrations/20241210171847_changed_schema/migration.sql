@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "AppliedJobStatus" AS ENUM ('APPLIED', 'SHORTLISTED', 'REJECTED', 'ACCEPTED');
+CREATE TYPE "AppliedJobStatus" AS ENUM ('APPLIED', 'SHORT_LISTED', 'REJECTED', 'ACCEPTED', 'HIRED');
 
 -- CreateEnum
 CREATE TYPE "EMPLOYMENT_TYPE" AS ENUM ('FULL_TIME', 'PART_TIME', 'INTERNSHIP');
@@ -9,6 +9,9 @@ CREATE TYPE "JOB_LEVEL" AS ENUM ('FRESHER', 'MID_LEVEL', 'SENIOR');
 
 -- CreateEnum
 CREATE TYPE "PROFICIENCY" AS ENUM ('BASIC', 'FLUENT', 'NATIVE', 'CONVERSATIONAL');
+
+-- CreateEnum
+CREATE TYPE "NotificationType" AS ENUM ('APPLIED', 'FOLLOWED', 'SAVED_JOB', 'SHORT_LISTED', 'HIRED', 'ACCEPTED', 'REJECTED', 'SAVED_PROFILE');
 
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('ADMIN', 'SUPER_ADMIN', 'CANDIDATE', 'EMPLOYER');
@@ -203,6 +206,22 @@ CREATE TABLE "Language" (
 );
 
 -- CreateTable
+CREATE TABLE "Notification" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "type" "NotificationType" NOT NULL,
+    "isRead" BOOLEAN NOT NULL DEFAULT false,
+    "redirectUrl" TEXT NOT NULL,
+    "senderId" TEXT NOT NULL,
+    "receiverId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Project" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -289,8 +308,8 @@ CREATE TABLE "Training" (
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phoneNumber" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
+    "phoneNumber" TEXT,
+    "password" TEXT,
     "role" "Role" NOT NULL,
     "status" "STATUS" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -367,6 +386,9 @@ CREATE UNIQUE INDEX "Language_id_key" ON "Language"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Language_language_key" ON "Language"("language");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Notification_id_key" ON "Notification"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Project_id_key" ON "Project"("id");
@@ -454,6 +476,12 @@ ALTER TABLE "Job" ADD CONSTRAINT "Job_companyId_fkey" FOREIGN KEY ("companyId") 
 
 -- AddForeignKey
 ALTER TABLE "Language" ADD CONSTRAINT "Language_candidateId_fkey" FOREIGN KEY ("candidateId") REFERENCES "Candidate"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Project" ADD CONSTRAINT "Project_candidateId_fkey" FOREIGN KEY ("candidateId") REFERENCES "Candidate"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
