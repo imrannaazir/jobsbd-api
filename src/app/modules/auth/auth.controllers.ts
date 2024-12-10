@@ -42,6 +42,21 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const socialLogin = catchAsync(async (req, res) => {
+  const result = await AuthServices.socialLogin(req.body);
+  const { refreshToken, ...remainingData } = result;
+  res.cookie('refreshToken', refreshToken, {
+    secure: false,
+    httpOnly: true,
+  });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User login successfully',
+    data: remainingData,
+  });
+});
+
 const refreshToken = catchAsync(async (req: Request, res: Response) => {
   const { refreshToken } = req.cookies;
   const result = await AuthServices.refreshToken(refreshToken);
@@ -103,5 +118,6 @@ const AuthControllers = {
   forgotPassword,
   resetPassword,
   verifyAccount,
+  socialLogin,
 };
 export default AuthControllers;

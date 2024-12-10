@@ -34,6 +34,11 @@ router.post(
 
 router.post('/forgot-password', AuthControllers.forgotPassword);
 router.post('/reset-password', AuthControllers.resetPassword);
+router.post(
+  '/social-login',
+  validateRequest(AuthValidation.socialLoginValidationSchema),
+  AuthControllers.socialLogin,
+);
 
 const AuthRoutes = router;
 export default AuthRoutes;

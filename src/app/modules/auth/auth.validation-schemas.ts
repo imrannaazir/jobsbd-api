@@ -36,9 +36,19 @@ const verifyAccountValidationSchema = z.object({
   }),
 });
 
+const socialLoginValidationSchema = z.object({
+  body: z.object({
+    email: z.string().email(),
+    fullName: z.string(),
+    image: z.string().optional(),
+    role: z.enum(Object.keys(Role) as [string, ...string[]]),
+  }),
+});
+
 const AuthValidation = {
   loginValidationSchema,
   registerValidationSchema,
   verifyAccountValidationSchema,
+  socialLoginValidationSchema,
 };
 export default AuthValidation;

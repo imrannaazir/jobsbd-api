@@ -4,7 +4,7 @@ import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import prisma from '../../../shared/prisma';
-import { IChangePassword, TLogin, TRegister } from './auth.types';
+import { IChangePassword, TLogin, TRegister, TSocialLogin } from './auth.types';
 import { hashedPassword } from './auth.utils';
 import emailSender from './sendMailer';
 
@@ -142,8 +142,8 @@ const login = async (payload: TLogin) => {
     throw new ApiError(httpStatus.CONFLICT, 'User Not Found!!!');
   }
   const isCorrectPassword = await bcrypt.compare(
-    payload.password,
-    isUserAlreadyExist.password,
+    payload!.password!,
+    isUserAlreadyExist!.password!,
   );
   if (!isCorrectPassword) {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Incorrect password');
@@ -236,7 +236,7 @@ const changePassword = async (user: any, payload: IChangePassword) => {
   });
   const isCorrectPassword = await bcrypt.compare(
     payload.oldPassword,
-    userData.password,
+    userData.password!,
   );
   if (!isCorrectPassword) {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Incorrect password');
@@ -366,6 +366,98 @@ const resetPassword = async (
   return data;
 };
 
+const socialLogin = async (payload: TSocialLogin) => {
+  const isUserAlreadyExist = await prisma.user.findFirst({
+    where: {
+      email: payload.email,
+    },
+  });
+
+  if (!isUserAlreadyExist) {
+    const user = await prisma.$transaction(async tx => {
+      const user = await tx.user.create({
+        data: {
+          email: payload.email,
+          role: payload.role,
+          status: 'ACTIVE',
+        },
+      });
+
+      if (payload.role === 'CANDIDATE') {
+        await tx.candidate.create({
+          data: {
+            fullName: payload.fullName,
+            userId: user.id,
+            image: payload.image,
+          },
+        });
+      } else if (payload.role === 'EMPLOYER') {
+        await tx.company.create({
+          data: {
+            companyName: payload.fullName,
+            userId: user?.id,
+            image: payload.image,
+          },
+        });
+      }
+
+      return user;
+    });
+
+    const accessToken = jwtHelpers.generateToken(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      config.jwt__access_secret as string,
+      config.jwt__access_expire_in as string,
+    );
+    const refreshToken = jwtHelpers.generateToken(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      config.jwt__refresh_secret as string,
+      config.jwt__refresh_expire_in as string,
+    );
+    return {
+      id: user.id,
+      email: user.email,
+      phoneNumber: user?.phoneNumber,
+      accessToken,
+      refreshToken,
+    };
+  } else {
+    const accessToken = jwtHelpers.generateToken(
+      {
+        id: isUserAlreadyExist.id,
+        email: isUserAlreadyExist.email,
+        role: isUserAlreadyExist.role,
+      },
+      config.jwt__access_secret as string,
+      config.jwt__access_expire_in as string,
+    );
+    const refreshToken = jwtHelpers.generateToken(
+      {
+        id: isUserAlreadyExist.id,
+        email: isUserAlreadyExist.email,
+        role: isUserAlreadyExist.role,
+      },
+      config.jwt__refresh_secret as string,
+      config.jwt__refresh_expire_in as string,
+    );
+    return {
+      id: isUserAlreadyExist.id,
+      email: isUserAlreadyExist.email,
+      phoneNumber: isUserAlreadyExist?.phoneNumber,
+      accessToken,
+      refreshToken,
+    };
+  }
+};
+
 const AuthServices = {
   register,
   verifyAccount,
@@ -374,6 +466,7 @@ const AuthServices = {
   changePassword,
   forgotPassword,
   resetPassword,
+  socialLogin,
 };
 
 export default AuthServices;
