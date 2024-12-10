@@ -15,7 +15,7 @@ model AppliedJob {
 
 enum AppliedJobStatus {
     APPLIED
-    SHORTLISTED
+    SHORT_LISTED
     REJECTED
     ACCEPTED
     HIRED

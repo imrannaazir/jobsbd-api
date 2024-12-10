@@ -145,9 +145,13 @@ const updateApplyStatus = async (
       id: appliedJobId,
       companyId: company.id,
     },
+    include: {
+      job: true,
+      candidate: true,
+    },
   });
 
-  const updateAppliedJob = await prisma.appliedJob.update({
+  const updatedAppliedJob = await prisma.appliedJob.update({
     where: {
       id: appliedJob.id,
     },
@@ -156,7 +160,36 @@ const updateApplyStatus = async (
     },
   });
 
-  return updateAppliedJob;
+  if (status !== appliedJob.status) {
+    let title: string = '';
+    let message: string = '';
+    if (updatedAppliedJob?.status === 'ACCEPTED') {
+      title = 'Your Application Has Been Accepted';
+      message = `Great news! Your application for the job: ${appliedJob?.job?.title} has been accepted by ${company.companyName}. Prepare for the next steps.`;
+    } else if (updatedAppliedJob?.status === 'SHORT_LISTED') {
+      title = 'You Have Been Shortlisted!';
+      message = `Great news! You have been shortlisted for the job: ${appliedJob?.job?.title}. Stay tuned for further updates from ${company.companyName}.`;
+    } else if (updatedAppliedJob?.status === 'HIRED') {
+      title = 'You’ve Been Hired!';
+      message = `Congratulations! You have been hired for the position: ${appliedJob?.job?.title} by ${company.companyName}. Welcome aboard!`;
+    } else if (updatedAppliedJob?.status === 'REJECTED') {
+      title = 'Application Update: Not Selected';
+      message = `We regret to inform you that your application for the job: ${appliedJob?.job?.title} was not selected by ${company.companyName}. Don’t lose hope—keep applying!`;
+    }
+
+    const notificationPayload: TNotificationPayload = {
+      title,
+      message,
+      receiverId: appliedJob?.candidate?.userId,
+      senderId: company?.userId,
+      redirectUrl: '/candidate-dashboard/applied-job',
+      type: status as NotificationType,
+    };
+
+    await NotificationServices.sendNotification(notificationPayload);
+  }
+
+  return updatedAppliedJob;
 };
 
 const AppliedJobServices = {

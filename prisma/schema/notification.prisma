@@ -19,6 +19,7 @@ enum NotificationType {
     SAVED_JOB
 
     SORT_LISTED
+    HIRED
     ACCEPTED
     REJECTED
     SAVED_PROFILE
