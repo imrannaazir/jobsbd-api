@@ -14,3 +14,10 @@ export type IChangePassword = {
   oldPassword: string;
   newPassword: string;
 };
+
+export type TSocialLogin = {
+  email: string;
+  fullName: string;
+  image?: string;
+  role: Role;
+};
