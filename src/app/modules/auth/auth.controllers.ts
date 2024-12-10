@@ -74,6 +74,7 @@ const changePassword = catchAsync(
   },
 );
 
+
 const forgotPassword = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthServices.forgotPassword(req.body);
   sendResponse(res, {
@@ -83,9 +84,10 @@ const forgotPassword = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
+ 
   const token = req.headers.authorization || '';
-  console.log(req.body);
   const result = await AuthServices.resetPassword(token, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
