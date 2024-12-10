@@ -79,6 +79,12 @@ const getCandidateById = async (candidateId: string) => {
     },
     include: {
       address: true,
+      skills: true,
+      experiences: true,
+      educations: true,
+      resumes: true,
+      trainings: true,
+      languages: true,
 
       user: {
         select: {
