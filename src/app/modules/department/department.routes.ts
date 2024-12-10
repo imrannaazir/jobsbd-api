@@ -13,11 +13,7 @@ router.post(
   validateRequest(DepartmentValidations.createDepartmentValidationSchema),
   DepartmentControllers.createDepartment,
 );
-router.get(
-  '/',
-  auth(Role.ADMIN, Role.SUPER_ADMIN, Role.EMPLOYER, Role.CANDIDATE),
-  DepartmentControllers.getAllDepartment,
-);
+router.get('/', DepartmentControllers.getAllDepartment);
 router.delete(
   '/:departmentId',
   auth(Role.ADMIN, Role.SUPER_ADMIN),

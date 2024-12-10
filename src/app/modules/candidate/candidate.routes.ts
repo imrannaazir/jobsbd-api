@@ -18,5 +18,11 @@ router.get(
   auth(Role.CANDIDATE),
   CandidateControllers.getMyCandidateData,
 );
+
+router.get(
+  '/get-single/:candidateId',
+  auth(Role.EMPLOYER),
+  CandidateControllers.getCandidateById,
+);
 const CandidateRoutes = router;
 export default CandidateRoutes;

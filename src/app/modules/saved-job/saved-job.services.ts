@@ -83,7 +83,12 @@ const getAllMyJobs = async (
       [sortBy]: sortOrder,
     },
     include: {
-      job: true,
+      job: {
+        include: {
+          company: true,
+          address: true,
+        },
+      },
     },
   });
 

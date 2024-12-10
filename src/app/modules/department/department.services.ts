@@ -23,8 +23,25 @@ const createDepartment = async (payload: TDepartment) => {
 };
 
 const getAllDepartment = async () => {
-  const result = await prisma.department.findMany();
-  return result;
+  const result = await prisma.department.findMany({
+    include: {
+      job: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  const transformedDepartments = result?.map(item => {
+    const { job, ...rest } = item;
+    return {
+      totalJobs: job?.length,
+      ...rest,
+    };
+  });
+
+  return transformedDepartments;
 };
 
 const deleteADepartment = async (id: string) => {

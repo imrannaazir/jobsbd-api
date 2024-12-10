@@ -31,6 +31,18 @@ const getMyCompany = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+const getCompanyById = catchAsync(async (req, res) => {
+  const companyId = req.params.companyId;
+  const result = await CompanyServices.getCompanyById(companyId!);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Company details retrieved successfully.',
+    data: result,
+  });
+});
 const getAllCompanies = catchAsync(async (req, res) => {
   const options = pick(req.query, OptionsFields);
   const filters = pick(req.query, CompanyFilterableFields) as TCompanyFilters;
@@ -44,5 +56,10 @@ const getAllCompanies = catchAsync(async (req, res) => {
   });
 });
 
-const CompanyControllers = { updateCompany, getMyCompany, getAllCompanies };
+const CompanyControllers = {
+  updateCompany,
+  getMyCompany,
+  getAllCompanies,
+  getCompanyById,
+};
 export default CompanyControllers;

@@ -18,4 +18,5 @@ enum AppliedJobStatus {
     SHORTLISTED
     REJECTED
     ACCEPTED
+    HIRED
 }

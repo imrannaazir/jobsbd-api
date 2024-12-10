@@ -117,6 +117,19 @@ const getSingleJob = async (jobId: string) => {
     where: {
       id: jobId,
     },
+    include: {
+      company: {
+        include: {
+          user: {
+            select: {
+              phoneNumber: true,
+              email: true,
+            },
+          },
+          address: true,
+        },
+      },
+    },
   });
   return result;
 };
@@ -266,10 +279,135 @@ const getAllJobs = async (
 
   return jobs;
 };
+
+const getAllMyPostedJobs = async (userId: string) => {
+  const company = await prisma.company.findFirstOrThrow({
+    where: {
+      userId,
+    },
+  });
+
+  const jobs = await prisma.job.findMany({
+    where: {
+      companyId: company.id,
+    },
+    include: {
+      appliedJobs: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+  const transformedJobs = jobs?.map(job => {
+    const { appliedJobs, ...rest } = job || {};
+    return {
+      totalApplicant: appliedJobs?.length,
+      ...rest,
+    };
+  });
+  return transformedJobs;
+};
+
+const updateJobById = async (
+  jobId: string,
+  payload: Partial<
+    Job & Address & { skills: { skill: string; duration: number }[] }
+  >,
+  userId: string,
+) => {
+  // Fetch the company to validate the user
+  const company = await prisma.company.findFirstOrThrow({
+    where: { userId },
+  });
+
+  // Check if the job exists and belongs to the company
+  await prisma.job.findFirstOrThrow({
+    where: {
+      id: jobId,
+      companyId: company.id,
+    },
+  });
+
+  // Validate the referenced industry and department, if updated
+  if (payload.industryId) {
+    await prisma.industry.findFirstOrThrow({
+      where: { id: payload.industryId },
+    });
+  }
+
+  if (payload.departmentId) {
+    await prisma.department.findFirstOrThrow({
+      where: { id: payload.departmentId },
+    });
+  }
+
+  const result = await prisma.$transaction(async transactionClient => {
+    // Update the job details
+    const updatedJob = await transactionClient.job.update({
+      where: { id: jobId },
+      data: {
+        title: payload.title,
+        vacancy: payload.vacancy,
+        deadline: payload.deadline ? new Date(payload.deadline) : undefined,
+        minSalary: payload.minSalary,
+        maxSalary: payload.maxSalary,
+        experienceInMonths: payload.experienceInMonths,
+        jobType: payload.jobType,
+        minAge: payload.minAge,
+        jobDescription: payload.jobDescription,
+        jobRequirements: payload.jobRequirements,
+        degreeName: payload.degreeName,
+        degreeTitle: payload.degreeTitle,
+        compensationBenefits: payload.compensationBenefits,
+        negotiable: payload.negotiable,
+        industryId: payload.industryId,
+        departmentId: payload.departmentId,
+      },
+    });
+
+    // Update the address, if provided
+    let updatedAddress = null;
+    if (payload.addressLine || payload.district) {
+      updatedAddress = await transactionClient.address.updateMany({
+        where: { jobId },
+        data: {
+          addressLine: payload.addressLine,
+          district: payload.district,
+        },
+      });
+    }
+
+    // Update skills, if provided
+    if (payload.skills && payload.skills.length > 0) {
+      // Delete existing skills for the job
+      await transactionClient.skill.deleteMany({
+        where: { jobId },
+      });
+
+      // Add new skills
+      const newSkills = payload.skills.map(skill => ({
+        skill: skill.skill,
+        duration: skill.duration,
+        jobId,
+      }));
+
+      await transactionClient.skill.createMany({
+        data: newSkills,
+      });
+    }
+
+    return { updatedJob };
+  });
+
+  return result;
+};
+
 const JobsServices = {
   createJob,
   deleteJob,
   getSingleJob,
   getAllJobs,
+  getAllMyPostedJobs,
 };
 export default JobsServices;

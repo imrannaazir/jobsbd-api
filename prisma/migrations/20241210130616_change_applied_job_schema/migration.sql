@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "AppliedJobStatus" AS ENUM ('APPLIED', 'SHORTLISTED', 'REJECTED', 'ACCEPTED');
+CREATE TYPE "AppliedJobStatus" AS ENUM ('APPLIED', 'SHORTLISTED', 'REJECTED', 'ACCEPTED', 'HIRED');
 
 -- CreateEnum
 CREATE TYPE "EMPLOYMENT_TYPE" AS ENUM ('FULL_TIME', 'PART_TIME', 'INTERNSHIP');
@@ -383,6 +383,9 @@ CREATE UNIQUE INDEX "Job_id_key" ON "Job"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Language_id_key" ON "Language"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Language_language_key" ON "Language"("language");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Notification_id_key" ON "Notification"("id");

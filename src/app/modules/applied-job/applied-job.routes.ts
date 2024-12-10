@@ -20,5 +20,20 @@ router.get(
   AppliedJobControllers.getAllMyAppliedJobs,
 );
 
+router.get(
+  '/applicants/:jobId',
+  auth(Role.EMPLOYER),
+  AppliedJobControllers.getAllApplicantsOfJob,
+);
+
+router.patch(
+  '/update-status/:appliedJobId',
+  auth(Role.EMPLOYER),
+  validateRequest(
+    AppliedJobValidationSchemas.updateApplyStatusValidationSchema,
+  ),
+  AppliedJobControllers.updateApplyStatus,
+);
+
 const AppliedJobRoutes = router;
 export default AppliedJobRoutes;

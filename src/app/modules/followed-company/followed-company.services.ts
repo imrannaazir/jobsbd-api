@@ -1,4 +1,5 @@
 import { NotificationType } from '@prisma/client';
+import httpStatus from 'http-status';
 import prisma from '../../../shared/prisma';
 import NotificationServices from '../notification/notification.services';
 import { TNotificationPayload } from '../notification/notification.types';
@@ -15,9 +16,8 @@ const followCompany = async (companyId: string, userId: string) => {
       userId,
     },
   });
-
-  const followedCompany = await prisma.followedCompany.create({
-    data: {
+  const isAlreadyFollowed = await prisma.followedCompany.findFirst({
+    where: {
       candidateId: candidate.id,
       companyId: company.id,
     },
@@ -32,10 +32,33 @@ const followCompany = async (companyId: string, userId: string) => {
     senderId: candidate?.userId,
   };
 
+  let followedCompany;
+  if (!isAlreadyFollowed) {
+    followedCompany = await prisma.followedCompany.create({
+      data: {
+        candidateId: candidate.id,
+        companyId: company.id,
+      },
+    });
+  } else {
+    followedCompany = await prisma.followedCompany.delete({
+      where: {
+        id: isAlreadyFollowed.id,
+        candidateId: candidate.id,
+        companyId: company.id,
+      },
+    });
+  }
   if (followedCompany?.id) {
     await NotificationServices.sendNotification(notificationPayload);
   }
-  return followedCompany;
+  return {
+    data: followedCompany,
+    statusCode: isAlreadyFollowed ? httpStatus.OK : httpStatus.CREATED,
+    message: isAlreadyFollowed
+      ? 'Company un followed successfully.'
+      : 'Company followed successfully.',
+  };
 };
 
 const getAllFollowedCompany = async (userId: string) => {

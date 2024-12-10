@@ -70,6 +70,7 @@ const updateExperience = async (
     where: { id: experienceId, candidate: { userId } },
     include: { location: true },
   });
+  console.log(payload);
   if (!experience) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Experience not found');
   }

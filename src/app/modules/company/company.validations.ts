@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const updateCompanyValidationSchema = z.object({
   body: z.object({
-    companyName: z.string(),
+    companyName: z.string().optional(),
     websiteLink: z.string().optional(),
     foundedDate: z
       .string()
@@ -13,8 +13,8 @@ const updateCompanyValidationSchema = z.object({
     numberOfOffices: z.number().optional(),
     companyDetails: z.string().optional(),
     image: z.string().optional(),
-    district: z.string(),
-    addressLine: z.string(),
+    district: z.string().optional(),
+    addressLine: z.string().optional(),
   }),
 });
 

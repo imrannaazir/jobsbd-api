@@ -72,8 +72,35 @@ const getMyCandidateData = async (userId: string) => {
   return candidate;
 };
 
+const getCandidateById = async (candidateId: string) => {
+  const candidate = await prisma.candidate.findFirstOrThrow({
+    where: {
+      id: candidateId,
+    },
+    include: {
+      address: true,
+      skills: true,
+      experiences: true,
+      educations: true,
+      resumes: true,
+      trainings: true,
+      languages: true,
+
+      user: {
+        select: {
+          phoneNumber: true,
+          email: true,
+          role: true,
+          id: true,
+        },
+      },
+    },
+  });
+  return candidate;
+};
 const CandidateServices = {
   updateCandidate,
   getMyCandidateData,
+  getCandidateById,
 };
 export default CandidateServices;
