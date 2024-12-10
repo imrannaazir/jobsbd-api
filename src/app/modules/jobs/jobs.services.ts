@@ -117,6 +117,19 @@ const getSingleJob = async (jobId: string) => {
     where: {
       id: jobId,
     },
+    include: {
+      company: {
+        include: {
+          user: {
+            select: {
+              phoneNumber: true,
+              email: true,
+            },
+          },
+          address: true,
+        },
+      },
+    },
   });
   return result;
 };

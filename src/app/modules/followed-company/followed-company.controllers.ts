@@ -21,7 +21,7 @@ const getAllFollowedCompany = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: '',
+    message: 'Retrieved all your followed company',
     data: result,
   });
 });
