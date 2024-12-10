@@ -56,7 +56,12 @@ const getAllMyAppliedJobs = async (
     skip,
     take: limit,
     include: {
-      job: true,
+      job: {
+        include: {
+          company: true,
+          address: true,
+        },
+      },
     },
     orderBy: {
       [sortBy]: sortOrder,

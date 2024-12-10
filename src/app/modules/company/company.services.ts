@@ -23,20 +23,22 @@ const updateCompany = async (
       data: companyPayload,
     });
 
-    await transactionClient.address.upsert({
-      where: {
-        companyId: company.id,
-      },
-      create: {
-        district,
-        addressLine,
-        companyId: company.id,
-      },
-      update: {
-        district,
-        addressLine,
-      },
-    });
+    if (district || addressLine) {
+      await transactionClient.address.upsert({
+        where: {
+          companyId: company.id,
+        },
+        create: {
+          district,
+          addressLine,
+          companyId: company.id,
+        },
+        update: {
+          district,
+          addressLine,
+        },
+      });
+    }
     return company;
   });
   return result;
@@ -46,6 +48,26 @@ const getMyCompany = async (userId: string): Promise<Company> => {
   const company = prisma.company.findUniqueOrThrow({
     where: {
       userId,
+    },
+    include: {
+      address: true,
+      user: {
+        select: {
+          phoneNumber: true,
+          email: true,
+          role: true,
+          id: true,
+        },
+      },
+    },
+  });
+
+  return company;
+};
+const getCompanyById = async (companyId: string): Promise<Company> => {
+  const company = prisma.company.findUniqueOrThrow({
+    where: {
+      id: companyId,
     },
     include: {
       address: true,
@@ -122,5 +144,10 @@ const getAllCompanies = async (
 
   return transformedData;
 };
-const CompanyServices = { updateCompany, getMyCompany, getAllCompanies };
+const CompanyServices = {
+  updateCompany,
+  getMyCompany,
+  getAllCompanies,
+  getCompanyById,
+};
 export default CompanyServices;
