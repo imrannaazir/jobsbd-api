@@ -7,4 +7,5 @@ export type TJobFilters = {
   minSalary: string;
   maxSalary: string;
   negotiable: string;
+  expiresIn: string;
 };

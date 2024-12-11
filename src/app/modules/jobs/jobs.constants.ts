@@ -7,4 +7,5 @@ export const JobFilterableFields = [
   'minSalary',
   'maxSalary',
   'negotiable',
+  'expiresIn',
 ];

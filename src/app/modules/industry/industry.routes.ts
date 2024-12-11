@@ -12,11 +12,7 @@ router.post(
   validateRequest(IndustryValidations.createIndustryValidationSchema),
   IndustryControllers.createIndustry,
 );
-router.get(
-  '/',
-  auth(Role.ADMIN, Role.SUPER_ADMIN, Role.EMPLOYER, Role.CANDIDATE),
-  IndustryControllers.getAllIndustry,
-);
+router.get('/', IndustryControllers.getAllIndustry);
 router.delete(
   '/:industryId',
   auth(Role.ADMIN, Role.SUPER_ADMIN),

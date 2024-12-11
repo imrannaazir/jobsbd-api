@@ -39,6 +39,15 @@ const getSingleJob = catchAsync(async (req: Request & { user?: any }, res) => {
     success: true,
   });
 });
+const getJobsCount = catchAsync(async (req: Request & { user?: any }, res) => {
+  const result = await JobsServices.getJobsCount();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Jobs count retrieved successfully',
+    data: result,
+    success: true,
+  });
+});
 
 const getAllJobs = catchAsync(async (req, res) => {
   const token = req.headers.authorization;
@@ -70,5 +79,6 @@ const JobControllers = {
   getSingleJob,
   getAllJobs,
   getAllMyPostedJobs,
+  getJobsCount,
 };
 export default JobControllers;

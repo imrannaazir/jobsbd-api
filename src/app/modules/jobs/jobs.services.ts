@@ -147,6 +147,7 @@ const getAllJobs = async (
   const minSalary = Number(filters.minSalary);
   const maxSalary = Number(filters.maxSalary);
   const negotiable = filters.negotiable && filters.negotiable.toLowerCase();
+  const expiresIn = filters.expiresIn;
 
   const { limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(options);
@@ -155,6 +156,16 @@ const getAllJobs = async (
 
   if (negotiable) {
     whereOptions.negotiable = negotiable === 'true';
+  }
+
+  if (expiresIn) {
+    const now = new Date();
+    const futureDate = new Date();
+    futureDate.setDate(now.getDate() + Number(expiresIn));
+    whereOptions.deadline = {
+      gte: now,
+      lte: futureDate,
+    };
   }
 
   if (query) {
@@ -403,11 +414,18 @@ const updateJobById = async (
   return result;
 };
 
+const getJobsCount = async () => {
+  const count = await prisma.job.count();
+
+  return count;
+};
+
 const JobsServices = {
   createJob,
   deleteJob,
   getSingleJob,
   getAllJobs,
   getAllMyPostedJobs,
+  getJobsCount,
 };
 export default JobsServices;
