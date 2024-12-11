@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/imrannaazir/jobsbd-web/refs/heads/emon/src/assets/main/logo-transparent.png" alt="jobsBD" height="150dp">
+  <img src="https://raw.githubusercontent.com/imrannaazir/jobsbd-web/refs/heads/emon/src/assets/jobsbd-logo.png" alt="jobsBD" height="150dp">
 </p>
 
 <p align=center>
@@ -8,21 +8,6 @@
   <a href="https://github.com/imrannaazir/jobsbd-web">Frontend repository</a> ·
   <a href="https://github.com/imrannaazir/jobsbd-api">Backend repository</a>
 </p>
-
-## 📋 Table of Contents
-
-- [About the Project](#about-the-project)
-- [Features](#features)
-  - [General Features](#general-features)
-  - [Admin Features](#admin-features)
-  - [Recruiter Features](#recruiter-features)
-- [Tech Stack](#️tech-stack)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Project Structure](#project-structure)
-- [Scripts](#scripts)
-- [License](#license)
 
 ## 🛠️ About JobsBD
 
@@ -132,10 +117,6 @@ Ensure you have the following installed:
    SUPER_ADMIN_PASSWORD=your_super_admin_password
    SUPER_ADMIN_PHONE_NUMBER=your_super_admin_phone_number
    ```
-
-```
-
-```
 
 4. **Run Migrations**
 
